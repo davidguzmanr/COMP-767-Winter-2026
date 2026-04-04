@@ -209,5 +209,6 @@ __marimo__/
 papers/
 trl/
 **/CultureGroundImages/
+checkpoints/
 
 dev.ipynb
