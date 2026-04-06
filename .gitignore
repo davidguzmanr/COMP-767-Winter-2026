@@ -210,5 +210,12 @@ papers/
 trl/
 **/CultureGroundImages/
 checkpoints/
+configs/
+results/
+**.out
 
 dev.ipynb
+scripts/data/preprocess_datasets.py
+scripts/dpo_vlm_cultural.py
+scripts/sft_vlm_cultural.py
+scripts/cultural_value_vector.py
