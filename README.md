@@ -8,18 +8,24 @@ Project for COMP-767: Large Language Models
 CulturalGround is preprocessed with `scripts/data/preprocess_cultural_ground.py`.
 
 ```bash
-# SFT — all valid examples except the last 250 per country
+# SFT - all valid examples except the last 250 per country
 python scripts/data/preprocess_cultural_ground.py \
-    --countries all --output_format sft \
+    --countries all \
+    --output_format sft \
     --dpo_holdout_size 250 \
-    --push_to_hub --repo_id davidguzmanr/CulturalGround-sft
+    --push_to_hub \
+    --repo_id davidguzmanr/CulturalGround-sft
 
-# DPO — last 250 valid examples per country
+# DPO - last 250 valid examples per country
 python scripts/data/preprocess_cultural_ground.py \
-    --countries all --output_format dpo \
+    --countries all \
+    --output_format dpo \
     --reference_model_name_or_path Qwen/Qwen2-VL-2B-Instruct \
-    --dpo_holdout_size 250 --regenerate_chosen \
-    --push_to_hub --repo_id davidguzmanr/CulturalGround-dpo
+    --dpo_rejected_batch_size 16 \
+    --max_samples 250 \
+    --regenerate_chosen \
+    --push_to_hub \
+    --repo_id davidguzmanr/CulturalGround-dpo
 ```
 
 The SFT and DPO splits are non-overlapping (`--dpo_holdout_size` reserves the last N valid examples per country for DPO).
