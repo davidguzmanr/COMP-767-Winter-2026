@@ -22,7 +22,7 @@ python scripts/data/preprocess_cultural_ground.py \
     --output_format dpo \
     --reference_model_name_or_path Qwen/Qwen2-VL-2B-Instruct \
     --dpo_rejected_batch_size 16 \
-    --max_samples 250 \
+    --dpo_holdout_size 250 \
     --regenerate_chosen \
     --push_to_hub \
     --repo_id davidguzmanr/CulturalGround-dpo
