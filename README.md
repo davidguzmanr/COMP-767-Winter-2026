@@ -44,21 +44,23 @@ The SFT and DPO splits are non-overlapping (`--dpo_holdout_size` reserves the la
 ### Training
 
 #### SFT
+This will train the model in 2 GPUs, we are using 2 H100 GPUs
 
 ```bash
-PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True python scripts/sft_cultural_ground.py \
+accelerate launch --num_processes 2 python scripts/sft_cultural_ground.py \
     --model_name_or_path Qwen/Qwen2.5-VL-3B-Instruct \
     --output_dir checkpoints/sft-qwen2-5-vl-3b-culturalground \
     --num_train_epochs 1 \
     --per_device_train_batch_size 2 \
     --gradient_accumulation_steps 4 \
     --gradient_checkpointing \
-    --save_steps 200 \
+    --save_steps 1000 \
     --dtype bfloat16 \
     --attn_implementation sdpa \
     --use_peft \
     --lora_r 64 \
-    --lora_target_modules all-linear
+    --lora_target_modules all-linear \
+    --learning_rate 2e-5
 ```
 
 #### DPO
@@ -66,20 +68,21 @@ PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True python scripts/sft_cultural_gro
 Pass a local SFT checkpoint or any HF model ID as `--model_name_or_path`. LoRA adapters in the checkpoint directory are detected and loaded automatically.
 
 ```bash
-PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True python scripts/dpo_cultural_ground.py \
+accelerate launch --num_processes 2 python scripts/dpo_cultural_ground.py \
     --model_name_or_path checkpoints/sft-qwen2-5-vl-3b-culturalground \
     --output_dir checkpoints/dpo-qwen2-5-vl-3b-culturalground \
     --num_train_epochs 1 \
     --per_device_train_batch_size 1 \
     --gradient_accumulation_steps 8 \
     --gradient_checkpointing \
-    --save_steps 200 \
+    --save_steps 1000 \
     --beta 0.1 \
     --dtype bfloat16 \
     --attn_implementation sdpa \
     --use_peft \
     --lora_r 64 \
-    --lora_target_modules all-linear
+    --lora_target_modules all-linear \
+    --learning_rate 1e-5
 ```
 
 #### DPO (preference pairs)
