@@ -47,9 +47,9 @@ The SFT and DPO splits are non-overlapping (`--dpo_holdout_size` reserves the la
 This will train the model in 2 GPUs, we are using 2 H100 GPUs
 
 ```bash
-accelerate launch --num_processes 2 python scripts/sft_cultural_ground.py \
+accelerate launch --num_processes 2 scripts/sft_cultural_ground.py \
     --model_name_or_path Qwen/Qwen2.5-VL-3B-Instruct \
-    --output_dir checkpoints/sft-qwen2-5-vl-3b-culturalground \
+    --output_dir checkpoints/SFT-Qwen2-5-VL-3B-Instruct-CulturalGround \
     --num_train_epochs 1 \
     --per_device_train_batch_size 2 \
     --gradient_accumulation_steps 4 \
@@ -68,9 +68,9 @@ accelerate launch --num_processes 2 python scripts/sft_cultural_ground.py \
 Pass a local SFT checkpoint or any HF model ID as `--model_name_or_path`. LoRA adapters in the checkpoint directory are detected and loaded automatically.
 
 ```bash
-accelerate launch --num_processes 2 python scripts/dpo_cultural_ground.py \
-    --model_name_or_path checkpoints/sft-qwen2-5-vl-3b-culturalground \
-    --output_dir checkpoints/dpo-qwen2-5-vl-3b-culturalground \
+accelerate launch --num_processes 2 scripts/dpo_cultural_ground.py \
+    --model_name_or_path checkpoints/SFT-Qwen2-5-VL-3B-Instruct-CulturalGround \
+    --output_dir checkpoints/DPO-Qwen2-5-VL-3B-Instruct-CulturalGround \
     --num_train_epochs 1 \
     --per_device_train_batch_size 1 \
     --gradient_accumulation_steps 8 \
