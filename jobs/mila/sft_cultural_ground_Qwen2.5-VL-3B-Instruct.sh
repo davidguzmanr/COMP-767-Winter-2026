@@ -41,8 +41,8 @@ accelerate launch --num_processes 2 scripts/sft_cultural_ground.py \
     --model_name_or_path Qwen/Qwen2.5-VL-3B-Instruct \
     --output_dir checkpoints/SFT-Qwen2-5-VL-3B-Instruct-CulturalGround \
     --num_train_epochs 1 \
-    --per_device_train_batch_size 2 \
-    --gradient_accumulation_steps 4 \
+    --per_device_train_batch_size 8 \
+    --gradient_accumulation_steps 1 \
     --gradient_checkpointing \
     --save_steps 1000 \
     --dtype bfloat16 \

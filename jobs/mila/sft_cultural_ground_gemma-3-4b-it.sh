@@ -41,8 +41,8 @@ accelerate launch --num_processes 2 scripts/sft_cultural_ground.py \
     --model_name_or_path google/gemma-3-4b-it \
     --output_dir checkpoints/SFT-gemma-3-4b-it-CulturalGround \
     --num_train_epochs 1 \
-    --per_device_train_batch_size 2 \
-    --gradient_accumulation_steps 4 \
+    --per_device_train_batch_size 8 \
+    --gradient_accumulation_steps 1 \
     --gradient_checkpointing \
     --save_steps 1000 \
     --dtype bfloat16 \
