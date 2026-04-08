@@ -68,12 +68,14 @@ Multi-GPU with accelerate + DeepSpeed ZeRO-3:
 
 from dataclasses import dataclass, field
 
+import logging
 import os
 
 import torch
 from datasets import load_dataset
 from peft import PeftConfig, PeftModel
 from transformers import AutoModelForImageTextToText, AutoProcessor
+from transformers.trainer_utils import get_last_checkpoint
 
 from trl import (
     DPOConfig,
@@ -115,6 +117,9 @@ def load_cultural_ground(args: CulturalGroundArguments):
 
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO)
+    logger = logging.getLogger(__name__)
+
     parser = TrlParser((CulturalGroundArguments, DPOConfig, ModelConfig))
     cg_args, training_args, model_args = parser.parse_args_and_config()
 
@@ -202,7 +207,17 @@ if __name__ == "__main__":
         peft_config=peft_config,
     )
 
-    trainer.train()
+    # Resume from the latest checkpoint if one exists in output_dir (handles
+    # preemption: the job simply re-queues and picks up where it left off).
+    last_checkpoint = None
+    if os.path.isdir(training_args.output_dir):
+        last_checkpoint = get_last_checkpoint(training_args.output_dir)
+        if last_checkpoint is not None:
+            logger.info(f"Resuming training from checkpoint: {last_checkpoint}")
+        else:
+            logger.info(f"Output directory '{training_args.output_dir}' exists but contains no checkpoint; starting from scratch.")
+
+    trainer.train(resume_from_checkpoint=last_checkpoint)
 
     trainer.save_model(training_args.output_dir)
     if training_args.push_to_hub:
