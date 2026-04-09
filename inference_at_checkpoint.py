@@ -140,7 +140,6 @@ for example in shuffled_dataset["test"]:
         print("Skipping:", example["Image ID"], "|", e)
         processed_files.add(example["Image ID"]) 
         continue
-    break
 
 # Final flush for any remaining results
 if results:
