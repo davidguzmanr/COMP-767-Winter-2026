@@ -47,22 +47,16 @@ Multi-GPU with accelerate + DeepSpeed ZeRO-3:
         --save_steps 100 \
         --dtype bfloat16
 """
-
-# /// script
-# dependencies = [
-#     "trl[peft]",
-#     "Pillow>=9.4.0",
-#     "datasets>=2.20",
-# ]
-# ///
-
 from dataclasses import dataclass, field
 
+import io
 import logging
 import os
 
 import torch
 from datasets import load_dataset
+from datasets import Image as HFImage
+from PIL import Image as PILImage
 from transformers import AutoModelForImageTextToText
 from transformers.trainer_utils import get_last_checkpoint
 
@@ -86,6 +80,44 @@ class CulturalGroundArguments:
         default="train",
         metadata={"help": "Dataset split to use for training."},
     )
+    image_max_pixels: int = field(
+        default=1_280 * 1_280,
+        metadata={
+            "help": (
+                "Maximum number of pixels (width × height) allowed per image. "
+                "Examples containing any image that exceeds this limit are dropped "
+                "before training to avoid CUDA OOM spikes. Default: 1638400 (1280×1280)."
+            )
+        },
+    )
+
+
+def _all_images_within_budget(example, max_pixels: int) -> bool:
+    """Return True if every image in the example is within the pixel budget.
+
+    Operates on raw bytes (decode=False) and reads only the image header via
+    PIL.Image.open without calling .load(), so it is much faster than decoding
+    the full pixel data.
+
+    PIL's decompression-bomb guard is temporarily lifted inside this function
+    because we apply our own stricter pixel cap via max_pixels.
+    """
+    images = example.get("images") or []
+    old_limit = PILImage.MAX_IMAGE_PIXELS
+    PILImage.MAX_IMAGE_PIXELS = None  # we do our own size check below
+    try:
+        for img_dict in images:
+            if img_dict is None:
+                continue
+            raw = img_dict.get("bytes") if isinstance(img_dict, dict) else None
+            if raw is None:
+                continue
+            with PILImage.open(io.BytesIO(raw)) as img:
+                if img.width * img.height > max_pixels:
+                    return False
+    finally:
+        PILImage.MAX_IMAGE_PIXELS = old_limit
+    return True
 
 
 def load_cultural_ground(args: CulturalGroundArguments):
@@ -93,6 +125,30 @@ def load_cultural_ground(args: CulturalGroundArguments):
     print(f"Loading {HF_DATASET} ...")
     dataset = load_dataset(HF_DATASET, split=args.cg_split)
     print(f"Total training examples: {len(dataset)}")
+
+    if args.image_max_pixels > 0:
+        before = len(dataset)
+        # Cast to decode=False so the filter reads only image headers (no full
+        # pixel decode) — roughly 10–20× faster than operating on PIL objects.
+        # num_proc=1 + keep_in_memory=True avoids Arrow cache-file collisions
+        # between the two DDP ranks that both run this code simultaneously.
+        dataset = (
+            dataset
+            .cast_column("images", [HFImage(decode=False)])
+            .filter(
+                _all_images_within_budget,
+                fn_kwargs={"max_pixels": args.image_max_pixels},
+                num_proc=1,
+                keep_in_memory=True,
+            )
+            .cast_column("images", [HFImage(decode=True)])
+        )
+        dropped = before - len(dataset)
+        print(
+            f"Filtered {dropped} examples with images > {args.image_max_pixels:,} pixels "
+            f"({len(dataset)} remaining)."
+        )
+
     return dataset
 
 
