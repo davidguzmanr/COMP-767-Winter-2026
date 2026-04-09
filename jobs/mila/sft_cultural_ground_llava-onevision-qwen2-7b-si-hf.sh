@@ -37,13 +37,13 @@ cd /home/mila/g/guzmand/scratch/Repositories/COMP-767-Winter-2026
 ##################################################################
 # Run
 ##################################################################
-accelerate launch --num_processes 2 scripts/sft_cultural_ground.py \
+accelerate launch --num_processes 2 --mixed_precision bf16 scripts/sft_cultural_ground.py \
     --model_name_or_path llava-hf/llava-onevision-qwen2-7b-si-hf \
     --output_dir checkpoints/SFT-llava-onevision-qwen2-7b-si-hf-CulturalGround \
-    --num_train_epochs 1 \
+    --max_steps 20000 \
     --per_device_train_batch_size 8 \
     --gradient_accumulation_steps 1 \
-    --gradient_checkpointing \
+    --gradient_checkpointing True \
     --save_steps 1000 \
     --dtype bfloat16 \
     --attn_implementation sdpa \
