@@ -11,7 +11,17 @@ import torch
 from transformers import AutoProcessor, AutoModelForCausalLM
 from peft import PeftModel
 from huggingface_hub import login
+import argparse
 
+parser = argparse.ArgumentParser()
+parser.add_argument("--checkpoint", type=str, required=True)
+parser.add_argument("--output", type=str, required=True)
+args = parser.parse_args()
+adapter_path = args.checkpoint
+
+base_model_id = "google/gemma-3-4b-it"
+checkpoint_name = f"{base_model_id}{os.path.basename(adapter_path)}"
+output_file = os.path.join("RESULTS", f"{checkpoint_name}.jsonl")
 
 HF_AUTH_TOKEN = "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"
 if HF_AUTH_TOKEN:
@@ -19,10 +29,7 @@ if HF_AUTH_TOKEN:
 else:
     print("Warning: No HF_TOKEN found. You may hit rate limits.")
 
-
-
-base_model_id = "google/gemma-3-4b-it"
-adapter_path = "/network/scratch/g/guzmand/Repositories/COMP-767-Winter-2026/checkpoints/SFT-gemma-3-4b-it-CulturalGround/checkpoint-1000"
+# adapter_path = "/network/scratch/g/guzmand/Repositories/COMP-767-Winter-2026/checkpoints/SFT-gemma-3-4b-it-CulturalGround/checkpoint-1000"
 
 base_model = AutoModelForCausalLM.from_pretrained(
     base_model_id,
@@ -60,7 +67,7 @@ def load_image(example):
 
 
 # inference info
-output_file = "RESULTS_gemma_checkpoint_test_grounded_culture_baseline.jsonl"
+# output_file = "RESULTS_gemma_checkpoint_test_grounded_culture_baseline.jsonl"
 baseline_prompt = "What cultural significance does the following image have?"
 ds = load_dataset("Multimedia-SMU/seeingculture-benchmark")
 shuffled_dataset = ds.shuffle(seed=42)
