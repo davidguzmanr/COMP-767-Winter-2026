@@ -211,7 +211,7 @@ trl/
 **/CultureGroundImages/
 checkpoints/
 configs/
-results/
+images_cache/
 **.out
 
 dev.ipynb
