@@ -46,6 +46,12 @@ def parse_args():
     parser.add_argument("--batch_size", type=int, default=4)
     parser.add_argument("--use_system_prompt", action="store_true",
                         help="Include cultural system prompt (use for finetuned models)")
+    parser.add_argument("--chat_template_source", type=str, default=None,
+                        help=(
+                            "Model ID to borrow the chat template from when the target model "
+                            "has none (e.g. a pretrained base model). Example: pass "
+                            "'google/gemma-3-4b-it' when evaluating 'google/gemma-3-4b-pt'."
+                        ))
     return parser.parse_args()
 
 
@@ -69,6 +75,17 @@ def main():
     else:
         print("No checkpoint provided — evaluating base model.")
     processor = AutoProcessor.from_pretrained(base_model_id)
+    if not getattr(processor, "chat_template", None) and not getattr(processor.tokenizer, "chat_template", None):
+        if args.chat_template_source is None:
+            raise ValueError(
+                "The model's processor has no chat_template. For pretrained (base) models, "
+                "pass --chat_template_source <it-model-id> (e.g. 'google/gemma-3-4b-it')."
+            )
+        _ct_processor = AutoProcessor.from_pretrained(args.chat_template_source)
+        _chat_template = _ct_processor.tokenizer.chat_template
+        processor.chat_template = _chat_template
+        processor.tokenizer.chat_template = _chat_template
+        print(f"Injected chat template from '{args.chat_template_source}' into base model processor.")
     model.eval()
 
     os.makedirs(os.path.dirname(output_file), exist_ok=True)

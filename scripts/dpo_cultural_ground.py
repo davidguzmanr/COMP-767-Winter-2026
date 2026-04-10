@@ -91,6 +91,17 @@ class CulturalGroundArguments:
         default="train",
         metadata={"help": "Dataset split to use for training."},
     )
+    chat_template_source: str | None = field(
+        default=None,
+        metadata={
+            "help": (
+                "Model ID to borrow the chat template from when the target model has none "
+                "(e.g. a pretrained base model). Example: pass 'google/gemma-3-4b-it' when "
+                "training 'google/gemma-3-4b-pt'. IT models already have a chat template, so "
+                "this argument is ignored for them."
+            )
+        },
+    )
     ignore_bias_buffers: bool = field(
         default=False,
         metadata={
@@ -242,6 +253,20 @@ if __name__ == "__main__":
         trust_remote_code=model_args.trust_remote_code,
         do_image_splitting=False,
     )
+    if not getattr(processor, "chat_template", None) and not getattr(processor.tokenizer, "chat_template", None):
+        if cg_args.chat_template_source is None:
+            raise ValueError(
+                "The model's processor has no chat_template. For pretrained (base) models, "
+                "pass --chat_template_source <it-model-id> (e.g. 'google/gemma-3-4b-it')."
+            )
+        _ct_processor = AutoProcessor.from_pretrained(
+            cg_args.chat_template_source,
+            trust_remote_code=model_args.trust_remote_code,
+        )
+        _chat_template = _ct_processor.tokenizer.chat_template
+        processor.chat_template = _chat_template
+        processor.tokenizer.chat_template = _chat_template
+        print(f"Injected chat template from '{cg_args.chat_template_source}' into base model processor.")
 
     ################
     # Dataset

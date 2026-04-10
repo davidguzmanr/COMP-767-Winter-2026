@@ -57,7 +57,7 @@ import torch
 from datasets import load_dataset
 from datasets import Image as HFImage
 from PIL import Image as PILImage
-from transformers import AutoModelForImageTextToText
+from transformers import AutoModelForImageTextToText, AutoProcessor
 from transformers.trainer_utils import get_last_checkpoint
 
 from trl import (
@@ -79,6 +79,17 @@ class CulturalGroundArguments:
     cg_split: str = field(
         default="train",
         metadata={"help": "Dataset split to use for training."},
+    )
+    chat_template_source: str | None = field(
+        default=None,
+        metadata={
+            "help": (
+                "Model ID to borrow the chat template from when the target model has none "
+                "(e.g. a pretrained base model). Example: pass 'google/gemma-3-4b-it' when "
+                "training 'google/gemma-3-4b-pt'. IT models already have a chat template, so "
+                "this argument is ignored for them."
+            )
+        },
     )
     image_max_pixels: int = field(
         default=1_280 * 1_280,
@@ -192,6 +203,28 @@ if __name__ == "__main__":
     )
 
     ################
+    # Processor
+    ################
+    processor = AutoProcessor.from_pretrained(
+        model_args.model_name_or_path,
+        trust_remote_code=model_args.trust_remote_code,
+    )
+    if not getattr(processor, "chat_template", None) and not getattr(processor.tokenizer, "chat_template", None):
+        if cg_args.chat_template_source is None:
+            raise ValueError(
+                "The model's processor has no chat_template. For pretrained (base) models, "
+                "pass --chat_template_source <it-model-id> (e.g. 'google/gemma-3-4b-it')."
+            )
+        _ct_processor = AutoProcessor.from_pretrained(
+            cg_args.chat_template_source,
+            trust_remote_code=model_args.trust_remote_code,
+        )
+        _chat_template = _ct_processor.tokenizer.chat_template
+        processor.chat_template = _chat_template
+        processor.tokenizer.chat_template = _chat_template
+        print(f"Injected chat template from '{cg_args.chat_template_source}' into base model processor.")
+
+    ################
     # Dataset
     ################
     train_dataset = load_cultural_ground(cg_args)
@@ -204,6 +237,7 @@ if __name__ == "__main__":
         args=training_args,
         train_dataset=train_dataset,
         peft_config=get_peft_config(model_args),
+        processing_class=processor,
     )
 
     # Resume from the latest checkpoint if one exists in output_dir (handles
