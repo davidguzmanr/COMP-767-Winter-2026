@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#SBATCH --job-name=sft_cultural_ground_llava-onevision-qwen2-7b-si-hf
+#SBATCH --job-name=sft_cultural_ground_Qwen2.5-VL-3B-Instruct
 #SBATCH --nodes=1
 #SBATCH --gres=gpu:h100:4
 #SBATCH --cpus-per-task=16
@@ -46,11 +46,11 @@ echo $HF_HOME
 # Run
 ##################################################################
 accelerate launch --num_processes 4 --mixed_precision bf16 scripts/sft_cultural_ground.py \
-    --model_name_or_path llava-hf/llava-onevision-qwen2-7b-si-hf \
-    --output_dir checkpoints/SFT-llava-onevision-qwen2-7b-si-hf-CulturalGround \
+    --model_name_or_path Qwen/Qwen2.5-VL-3B-Instruct \
+    --output_dir checkpoints/SFT-Qwen2-5-VL-3B-Instruct-CulturalGround \
     --max_steps 20000 \
-    --per_device_train_batch_size 2 \
-    --gradient_accumulation_steps 2 \
+    --per_device_train_batch_size 4 \
+    --gradient_accumulation_steps 1 \
     --gradient_checkpointing True \
     --save_steps 1000 \
     --dtype bfloat16 \
