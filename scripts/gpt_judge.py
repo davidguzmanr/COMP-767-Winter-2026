@@ -103,7 +103,7 @@ def main():
             },
         ]
 
-        time.sleep(1)
+        # time.sleep(1)
         for attempt in range(8):
             try:
                 response = client.chat.completions.create(
