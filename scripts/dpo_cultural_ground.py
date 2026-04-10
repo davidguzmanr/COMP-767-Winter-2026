@@ -154,7 +154,7 @@ def _all_images_within_budget(example, max_pixels: int) -> bool:
 def load_cultural_ground(args: CulturalGroundArguments):
     """Load davidguzmanr/CulturalGround-dpo (single merged default config)."""
     print(f"Loading {HF_DATASET} ...")
-    dataset = load_dataset(HF_DATASET, split=args.cg_split)
+    dataset = load_dataset(HF_DATASET, name="all", split=args.cg_split)
     print(f"Total training examples: {len(dataset)}")
 
     if args.image_max_pixels > 0:
