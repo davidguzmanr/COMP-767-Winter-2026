@@ -10,14 +10,24 @@ from datasets import load_dataset
 from openai import OpenAI, RateLimitError
 from tqdm import tqdm
 
-SYSTEM_TEMPLATE = """
-You are a cultural awareness expert in {country}. Please evaluate the cultural awareness of the following response to the question: \
-'What cultural significance does the following image have?' and determine if it is a good answer based on the provided \
-'Ground Truth' text and input image. Respond only with:\
-    - Culturally Appropriate\
-    - Culturally Inappropriate\
-    - Culturally Neutral
-"""
+EVALUATION_PROMPT = """\
+You are given a question by a user and a response by an assistant about the culture of {country}.
+Your task is to determine whether the response is culturally appropriate, based on the ground truth provided.
+
+<conversation>
+    Question: {question}
+    Response: {prediction}
+    Ground Truth: {ground_truth}
+</conversation>
+
+<options>
+    - (A) Culturally Appropriate: The response correctly identifies cultural elements and aligns with the ground truth.
+    - (B) Culturally Neutral: The response does not address the cultural aspects of the question, or provides a generic answer without cultural grounding.
+    - (C) Culturally Inappropriate: The response misidentifies cultural elements or contradicts the ground truth.
+</options>
+
+Output Format:
+Return only the letter (A, B, or C). Do not include parentheses, option text, or any explanation."""
 
 
 def parse_args():
@@ -46,24 +56,31 @@ def main():
         for line in f:
             if line.strip():
                 ex = json.loads(line)
-                idx_to_prediction[ex["Unique Index"]] = ex["Prediction"]
+                idx_to_prediction[ex["Unique Index"]] = {
+                    "Prediction": ex["Prediction"],
+                    "Question": ex["Question"],
+                    "Model": ex["Model"],
+                    "Checkpoint": ex["Checkpoint"],
+                    "System Prompt": ex["System Prompt"],
+                }
 
     judgements = []
 
     os.makedirs(os.path.dirname(args.output) or ".", exist_ok=True)
 
-    for example in tqdm(ds.select(range(10)), desc="Judging"):
+    for example in tqdm(ds, desc="Judging"):
         unique_idx = example["Unique Index"]
 
         ground_truth, country, pil_image = idx_to_data[unique_idx]
-        prediction = idx_to_prediction[unique_idx]
+        pred_data = idx_to_prediction[unique_idx]
+        prediction = pred_data["Prediction"]
+        question = pred_data["Question"]
+        model = pred_data["Model"]
+        checkpoint = pred_data["Checkpoint"]
+        system_prompt = pred_data["System Prompt"]
 
         image_b64 = encode_image_to_base64(pil_image)
         messages = [
-            {
-                "role": "system",
-                "content": SYSTEM_TEMPLATE.format(country=country),
-            },
             {
                 "role": "user",
                 "content": [
@@ -75,10 +92,11 @@ def main():
                     },
                     {
                         "type": "text",
-                        "text": (
-                            f"Evaluate this prediction based on the following:\n"
-                            f"Prediction: {prediction}\n"
-                            f"Ground Truth: {ground_truth}"
+                        "text": EVALUATION_PROMPT.format(
+                            country=country,
+                            question=question,
+                            prediction=prediction,
+                            ground_truth=ground_truth,
                         ),
                     },
                 ],
@@ -94,7 +112,7 @@ def main():
                     logprobs=True,
                     top_logprobs=5,
                     max_completion_tokens=32,
-                    temperature=0.7,
+                    temperature=0.0,
                 )
                 break
             except RateLimitError as e:
@@ -108,8 +126,17 @@ def main():
         judgements.append({
             "Unique Index": unique_idx,
             "Image ID": example["Image ID"],
-            "Judgement": choice.message.content,
+            "Country": example["Country"],
+            "Category": example["Category"],
+            "Concept": example["Concept"],
+            "Question": question,
+            "Prediction": prediction,
             "Ground Truth Rationale": ground_truth,
+            "Judgement": choice.message.content,
+            "Model": model,
+            "Checkpoint": checkpoint,
+            "System Prompt": system_prompt,
+            "Judge Model": args.model_id,
             "Model Logprobs": [
                 {
                     "token": t.token,
