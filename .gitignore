@@ -211,8 +211,10 @@ trl/
 **/CultureGroundImages/
 checkpoints/
 configs/
-results/
+images_cache/
 **.out
+job_error*
+job_output*
 
 dev.ipynb
 scripts/data/preprocess_datasets.py
@@ -222,3 +224,6 @@ scripts/cultural_value_vector.py
 pyarrow-21.0.0-cp310-cp310-linux_x86_64.whl
 scripts/test_gemini_logprobs.py
 scripts/test_openai_logprobs.py
+scripts/data/preprocess_cultural_ground_openai.py
+test_gpt_judge.py
+logs/

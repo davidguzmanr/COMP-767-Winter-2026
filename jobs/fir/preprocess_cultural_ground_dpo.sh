@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-#SBATCH --job-name=sft_cultural_ground_llava-onevision-qwen2-7b-si-hf
+#SBATCH --job-name=preprocess_cultural_ground_dpo-2
 #SBATCH --nodes=1
-#SBATCH --gres=gpu:h100:4
-#SBATCH --cpus-per-task=16
-#SBATCH --mem=256G
-#SBATCH --time=0-24:00:00
-#SBATCH --account=aip-davlan
+#SBATCH --gres=gpu:h100:1
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=48G
+#SBATCH --time=0-01:00:00
+#SBATCH --account=def-davlan
 #SBATCH --output=%x-%j.out
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=david.guzman@mila.quebec
@@ -18,13 +18,10 @@ module load StdEnv/2023 scipy-stack/2023b
 module load gcc arrow/23.0.1
 module load cuda/12.2
 
-export HF_HOME=/home/d/davidguz/links/scratch/huggingface
-export HF_DATASETS_OFFLINE=1
-export HF_HUB_OFFLINE=1
-export TRANSFORMERS_OFFLINE=1
+export HF_HOME=/home/davidguz/scratch/huggingface
 export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
 
-cd /home/d/davidguz/links/scratch/Repositories/COMP-767-Winter-2026
+cd /home/davidguz/scratch/Repositories/COMP-767-Winter-2026
 source COMP-767/bin/activate
 
 echo "NVCC version:"
@@ -42,23 +39,64 @@ echo $HF_HOME
 ##################################################################
 # Start the main job
 ##################################################################
-##################################################################
-# Run
-##################################################################
-accelerate launch --num_processes 4 --mixed_precision bf16 scripts/sft_cultural_ground.py \
-    --model_name_or_path llava-hf/llava-onevision-qwen2-7b-si-hf \
-    --output_dir checkpoints/SFT-llava-onevision-qwen2-7b-si-hf-CulturalGround \
-    --max_steps 20000 \
-    --per_device_train_batch_size 2 \
-    --gradient_accumulation_steps 2 \
-    --gradient_checkpointing True \
-    --save_steps 1000 \
-    --dtype bfloat16 \
-    --attn_implementation sdpa \
-    --use_peft \
-    --lora_r 64 \
-    --lora_target_modules all-linear \
-    --learning_rate 2e-5
+
+countries=(
+    bangladesh
+    brazil
+    bulgaria
+    china
+    czechia
+    egypt
+    ethiopia
+    france
+    germany
+    greece
+    india
+    indonesia
+    iran
+    ireland
+    israel
+    italy
+    japan
+    kenya
+    malaysia
+    mexico
+    mongolia
+    netherlands
+    nigeria
+    norway
+    pakistan
+    poland
+    portugal
+    romania
+    russia
+    rwanda
+    saudi_arabia
+    singapore
+    south_korea
+    spain
+    sri_lanka
+    taiwan
+    tanzania
+    thailand
+    turkey
+    ukraine
+    united_kingdom
+    vietnam
+)
+
+for country in "${countries[@]}"; do
+    python scripts/data/preprocess_cultural_ground.py \
+        --countries "$country" \
+        --output_format dpo \
+        --reference_model_name_or_path Qwen/Qwen2.5-VL-32B-Instruct \
+        --dpo_rejected_batch_size 2 \
+        --dpo_holdout_size 250 \
+        --regenerate_chosen \
+        --push_to_hub \
+        --repo_id davidguzmanr/CulturalGround-dpo \
+        --merge_countries False
+done
 
 ##################################################################
 # Print ending datetime and total duration

@@ -35,7 +35,7 @@ response = client.chat.completions.create(
     ],
     logprobs=True,
     top_logprobs=5,
-    max_completion_tokens=64,
+    max_completion_tokens=512,
     temperature=0.7,
 )
 
