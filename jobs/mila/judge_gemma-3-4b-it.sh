@@ -42,7 +42,7 @@ cd /home/mila/g/guzmand/scratch/Repositories/COMP-767-Winter-2026
 ##################################################################
 python scripts/gpt_judge.py \
     --results_file results/gemma-3-4b-it-base.jsonl \
-    --output results/gemma-3-4b-it-base-judge.jsonl \
+    --output results/gemma-3-4b-it-base-judge.json \
     --model_id gpt-4o-mini
 
 ##################################################################
@@ -50,7 +50,7 @@ python scripts/gpt_judge.py \
 ##################################################################
 python scripts/gpt_judge.py \
     --results_file results/gemma-3-4b-it-sft-5000.jsonl \
-    --output results/gemma-3-4b-it-sft-5000-judge.jsonl \
+    --output results/gemma-3-4b-it-sft-5000-judge.json \
     --model_id gpt-4o-mini
 
 ##################################################################
@@ -58,7 +58,7 @@ python scripts/gpt_judge.py \
 ##################################################################
 python scripts/gpt_judge.py \
     --results_file results/gemma-3-4b-it-sft-10000.jsonl \
-    --output results/gemma-3-4b-it-sft-10000-judge.jsonl \
+    --output results/gemma-3-4b-it-sft-10000-judge.json \
     --model_id gpt-4o-mini
 
 ##################################################################
@@ -66,7 +66,7 @@ python scripts/gpt_judge.py \
 ##################################################################
 python scripts/gpt_judge.py \
     --results_file results/gemma-3-4b-it-sft-15000.jsonl \
-    --output results/gemma-3-4b-it-sft-15000-judge.jsonl \
+    --output results/gemma-3-4b-it-sft-15000-judge.json \
     --model_id gpt-4o-mini
 
 ##################################################################
@@ -74,7 +74,7 @@ python scripts/gpt_judge.py \
 ##################################################################
 python scripts/gpt_judge.py \
     --results_file results/gemma-3-4b-it-sft-20000.jsonl \
-    --output results/gemma-3-4b-it-sft-20000-judge.jsonl \
+    --output results/gemma-3-4b-it-sft-20000-judge.json \
     --model_id gpt-4o-mini
 
 
