@@ -7,11 +7,18 @@ Examples:
         --model_id google/gemma-3-4b-it \
         --output results/gemma-3-4b-it-base.jsonl
 
-    # Evaluate a fine-tuned PEFT checkpoint
+    # Evaluate a fine-tuned PEFT checkpoint (without system prompt)
     python inference_at_checkpoint.py \
         --model_id google/gemma-3-4b-it \
         --checkpoint /path/to/checkpoint \
         --output results/gemma-3-4b-it-finetuned.jsonl
+
+    # Evaluate a fine-tuned PEFT checkpoint (with cultural system prompt, matches training format)
+    python inference_at_checkpoint.py \
+        --model_id google/gemma-3-4b-it \
+        --checkpoint /path/to/checkpoint \
+        --output results/gemma-3-4b-it-finetuned-sysprompt.jsonl \
+        --use_system_prompt
 
     # Use a different base model with a larger batch size
     python inference_at_checkpoint.py \
@@ -37,6 +44,8 @@ def parse_args():
                         help="Path to a PEFT adapter checkpoint. If omitted, the base model is evaluated as-is.")
     parser.add_argument("--output", type=str, required=True)
     parser.add_argument("--batch_size", type=int, default=4)
+    parser.add_argument("--use_system_prompt", action="store_true",
+                        help="Include cultural system prompt (use for finetuned models)")
     return parser.parse_args()
 
 
@@ -76,15 +85,22 @@ def main():
 
         texts, images = [], []
         for example in batch:
-            messages = [
-                {
-                    "role": "user",
-                    "content": [
-                        {"type": "image"},
-                        {"type": "text", "text": f"What cultural significance does the following image have in {example['Country']}?"}
-                    ]
-                }
-            ]
+            messages = []
+            if args.use_system_prompt:
+                messages.append({
+                    "role": "system",
+                    "content": (
+                        f"You are a helpful assistant with expertise in {example['Country']} culture. "
+                        f"When answering questions, consider the cultural context of {example['Country']}."
+                    )
+                })
+            messages.append({
+                "role": "user",
+                "content": [
+                    {"type": "image"},
+                    {"type": "text", "text": example["Question"]}
+                ]
+            })
             texts.append(processor.apply_chat_template(messages, add_generation_prompt=True))
             images.append(example["Image"].convert("RGB"))
 
@@ -109,8 +125,15 @@ def main():
             )
             results.append({
                 "Image ID": example["Image ID"],
+                "Country": example["Country"],
+                "Category": example["Category"],
+                "Concept": example["Concept"],
+                "Question": example["Question"],
                 "Prediction": output_text,
-                "Ground Truth Rationale": example["Rationale"]
+                "Ground Truth Rationale": example["Rationale"],
+                "Model": base_model_id,
+                "Checkpoint": args.checkpoint,
+                "System Prompt": args.use_system_prompt,
             })
             counter += 1
 
