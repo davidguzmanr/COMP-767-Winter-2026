@@ -124,6 +124,7 @@ def main():
                 skip_special_tokens=True
             )
             results.append({
+                "Unique Index": example["Unique Index"],
                 "Image ID": example["Image ID"],
                 "Country": example["Country"],
                 "Category": example["Category"],
@@ -139,19 +140,11 @@ def main():
 
         pbar.set_postfix(processed=counter)
 
-        if counter % 10 == 0:
-            with open(output_file, "a") as f:
-                for r in results:
-                    json.dump(r, f)
-                    f.write("\n")
-            results = []
-
-    if results:
-        with open(output_file, "a") as f:
-            for r in results:
-                json.dump(r, f)
-                f.write("\n")
-        print(f" Final flush: {len(results)} results written to {output_file}")
+    with open(output_file, "w") as f:
+        for r in results:
+            json.dump(r, f)
+            f.write("\n")
+    print(f"Saved {len(results)} results to {output_file}")
 
 
 if __name__ == "__main__":
