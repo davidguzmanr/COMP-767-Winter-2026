@@ -209,20 +209,27 @@ if __name__ == "__main__":
         model_args.model_name_or_path,
         trust_remote_code=model_args.trust_remote_code,
     )
-    if not getattr(processor, "chat_template", None) and not getattr(processor.tokenizer, "chat_template", None):
-        if cg_args.chat_template_source is None:
+    # SFTTrainer calls processor.apply_chat_template() directly, so the template
+    # must be set on the processor itself — not only on the tokenizer.
+    if not getattr(processor, "chat_template", None):
+        tokenizer_template = getattr(processor.tokenizer, "chat_template", None)
+        if tokenizer_template:
+            processor.chat_template = tokenizer_template
+            print("Copied chat template from processor tokenizer to processor.")
+        elif cg_args.chat_template_source is None:
             raise ValueError(
                 "The model's processor has no chat_template. For pretrained (base) models, "
                 "pass --chat_template_source <it-model-id> (e.g. 'google/gemma-3-4b-it')."
             )
-        _ct_processor = AutoProcessor.from_pretrained(
-            cg_args.chat_template_source,
-            trust_remote_code=model_args.trust_remote_code,
-        )
-        _chat_template = _ct_processor.tokenizer.chat_template
-        processor.chat_template = _chat_template
-        processor.tokenizer.chat_template = _chat_template
-        print(f"Injected chat template from '{cg_args.chat_template_source}' into base model processor.")
+        else:
+            _ct_processor = AutoProcessor.from_pretrained(
+                cg_args.chat_template_source,
+                trust_remote_code=model_args.trust_remote_code,
+            )
+            _chat_template = _ct_processor.tokenizer.chat_template
+            processor.chat_template = _chat_template
+            processor.tokenizer.chat_template = _chat_template
+            print(f"Injected chat template from '{cg_args.chat_template_source}' into base model processor.")
 
     ################
     # Dataset

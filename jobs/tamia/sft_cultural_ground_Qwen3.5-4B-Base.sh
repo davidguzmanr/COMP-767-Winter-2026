@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#SBATCH --job-name=sft_cultural_ground_Qwen2-VL-7B
+#SBATCH --job-name=sft_cultural_ground_Qwen3.5-4B-Base
 #SBATCH --nodes=1
 #SBATCH --gres=gpu:h100:4
 #SBATCH --cpus-per-task=32
@@ -46,9 +46,9 @@ echo $HF_HOME
 # Run
 ##################################################################
 accelerate launch --num_processes 4 --mixed_precision bf16 scripts/sft_cultural_ground.py \
-    --model_name_or_path Qwen/Qwen2-VL-7B \
-    --chat_template_source Qwen/Qwen2-VL-7B-Instruct \
-    --output_dir checkpoints/SFT-Qwen2-VL-7B-CulturalGround \
+    --model_name_or_path Qwen/Qwen3.5-4B-Base  \
+    --chat_template_source Qwen/Qwen3.5-4B  \
+    --output_dir checkpoints/SFT-Qwen3.5-4B-Base-CulturalGround \
     --max_steps 20000 \
     --per_device_train_batch_size 2 \
     --gradient_accumulation_steps 2 \
