@@ -212,6 +212,7 @@ trl/
 checkpoints/
 configs/
 images_cache/
+logs/
 **.out
 job_error*
 job_output*
@@ -226,4 +227,4 @@ scripts/test_gemini_logprobs.py
 scripts/test_openai_logprobs.py
 scripts/data/preprocess_cultural_ground_openai.py
 test_gpt_judge.py
-logs/
+upload_checkpoints.py

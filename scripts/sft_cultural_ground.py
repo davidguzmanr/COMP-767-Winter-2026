@@ -134,7 +134,7 @@ def _all_images_within_budget(example, max_pixels: int) -> bool:
 def load_cultural_ground(args: CulturalGroundArguments):
     """Load davidguzmanr/CulturalGround-sft (single merged default config)."""
     print(f"Loading {HF_DATASET} ...")
-    dataset = load_dataset(HF_DATASET, split=args.cg_split).select(range(100))
+    dataset = load_dataset(HF_DATASET, split=args.cg_split)
     print(f"Total training examples: {len(dataset)}")
 
     if args.image_max_pixels > 0:
@@ -248,7 +248,9 @@ if __name__ == "__main__":
         class VisionSFTTrainer(SFTTrainer):
             def compute_loss(self, model, inputs, return_outputs=False, num_items_in_batch=None):
                 if "labels" in inputs:
-                    cfg = getattr(model.config, "text_config", model.config)
+                    # Unwrap DDP so .config is always accessible in multi-GPU runs.
+                    _model = getattr(model, "module", model)
+                    cfg = getattr(_model.config, "text_config", _model.config)
                     vocab_size = cfg.vocab_size
                     labels = inputs["labels"]
                     inputs["labels"] = labels.masked_fill(labels >= vocab_size, -100)
