@@ -54,7 +54,7 @@ python scripts/inference_at_checkpoint.py \
     --model_id llava-hf/llava-onevision-qwen2-7b-si-hf \
     --checkpoint checkpoints/SFT-llava-onevision-qwen2-7b-si-hf-CulturalGround/checkpoint-5000 \
     --output results/llava-onevision-qwen2-7b-si-hf-sft-5000.jsonl \
-    --batch_size 32 \
+    --batch_size 8 \
     --use_system_prompt
 
 ##################################################################
@@ -64,7 +64,7 @@ python scripts/inference_at_checkpoint.py \
     --model_id llava-hf/llava-onevision-qwen2-7b-si-hf \
     --checkpoint checkpoints/SFT-llava-onevision-qwen2-7b-si-hf-CulturalGround/checkpoint-10000 \
     --output results/llava-onevision-qwen2-7b-si-hf-sft-10000.jsonl \
-    --batch_size 32 \
+    --batch_size 8 \
     --use_system_prompt
 
 ##################################################################
@@ -74,7 +74,7 @@ python scripts/inference_at_checkpoint.py \
     --model_id llava-hf/llava-onevision-qwen2-7b-si-hf \
     --checkpoint checkpoints/SFT-llava-onevision-qwen2-7b-si-hf-CulturalGround/checkpoint-15000 \
     --output results/llava-onevision-qwen2-7b-si-hf-sft-15000.jsonl \
-    --batch_size 32 \
+    --batch_size 8 \
     --use_system_prompt
 
 ##################################################################
@@ -84,7 +84,7 @@ python scripts/inference_at_checkpoint.py \
     --model_id llava-hf/llava-onevision-qwen2-7b-si-hf \
     --checkpoint checkpoints/SFT-llava-onevision-qwen2-7b-si-hf-CulturalGround/checkpoint-20000 \
     --output results/llava-onevision-qwen2-7b-si-hf-sft-20000.jsonl \
-    --batch_size 32 \
+    --batch_size 8 \
     --use_system_prompt
 
 echo "Job $SLURM_JOB_ID finished on $(hostname) at $(date)"
