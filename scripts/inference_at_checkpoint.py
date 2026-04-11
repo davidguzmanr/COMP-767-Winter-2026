@@ -31,7 +31,7 @@ import os
 import torch
 from datasets import load_dataset
 import json
-from transformers import AutoProcessor, AutoModelForCausalLM
+from transformers import AutoProcessor, AutoModelForImageTextToText
 from peft import PeftModel
 import argparse
 from tqdm import tqdm
@@ -56,6 +56,9 @@ def parse_args():
 
 
 def main():
+    torch.manual_seed(42)
+    torch.cuda.manual_seed_all(42)
+
     args = parse_args()
     output_file = args.output
     batch_size = args.batch_size
@@ -63,7 +66,7 @@ def main():
 
     ds = load_dataset("davidguzmanr/seeingculture-benchmark", split="test")
 
-    model = AutoModelForCausalLM.from_pretrained(
+    model = AutoModelForImageTextToText.from_pretrained(
         base_model_id,
         device_map="auto",
         dtype=torch.bfloat16
@@ -86,6 +89,8 @@ def main():
         processor.chat_template = _chat_template
         processor.tokenizer.chat_template = _chat_template
         print(f"Injected chat template from '{args.chat_template_source}' into base model processor.")
+    if getattr(processor.tokenizer, "padding_side", None) != "left":
+        processor.tokenizer.padding_side = "left"
     model.eval()
 
     os.makedirs(os.path.dirname(output_file), exist_ok=True)
@@ -131,7 +136,8 @@ def main():
         with torch.no_grad():
             outputs = model.generate(
                 **inputs,
-                max_new_tokens=512
+                max_new_tokens=512,
+                do_sample=False,
             )
 
         input_len = inputs.input_ids.shape[-1]
