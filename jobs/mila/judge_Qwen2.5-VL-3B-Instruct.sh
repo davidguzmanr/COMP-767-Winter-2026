@@ -1,11 +1,10 @@
 #!/usr/bin/env bash
-#SBATCH --job-name=inference_gemma-3-4b-it
-#SBATCH --partition=long	
+#SBATCH --job-name=judge_Qwen2.5-VL-3B-Instruct
+#SBATCH --partition=long-cpu	
 #SBATCH --nodes=1
-#SBATCH --gres=gpu:a100l:1
-#SBATCH --cpus-per-task=8
-#SBATCH --mem=48G
-#SBATCH --time=0-06:00:00
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=32G
+#SBATCH --time=1-00:00:00
 #SBATCH --output=%x-%j.out
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=david.guzman@mila.quebec
@@ -41,50 +40,41 @@ cd /home/mila/g/guzmand/scratch/Repositories/COMP-767-Winter-2026
 ##################################################################
 # Base model
 ##################################################################
-python scripts/inference_at_checkpoint.py \
-    --model_id google/gemma-3-4b-it \
-    --output results/gemma-3-4b-it-base.jsonl \
-    --batch_size 32 \
-    --use_system_prompt
+python scripts/gpt_judge.py \
+    --results_file results/Qwen2.5-VL-3B-Instruct-base.jsonl \
+    --output results/Qwen2.5-VL-3B-Instruct-base-judge.json \
+    --model_id gpt-4o-mini
 
 ##################################################################
 # 5000 steps of SFT
 ##################################################################
-python scripts/inference_at_checkpoint.py \
-    --model_id google/gemma-3-4b-it \
-    --checkpoint checkpoints/SFT-gemma-3-4b-it-CulturalGround/checkpoint-5000 \
-    --output results/gemma-3-4b-it-sft-5000.jsonl \
-    --batch_size 32 \
-    --use_system_prompt
+python scripts/gpt_judge.py \
+    --results_file results/Qwen2.5-VL-3B-Instruct-sft-5000.jsonl \
+    --output results/Qwen2.5-VL-3B-Instruct-sft-5000-judge.json \
+    --model_id gpt-4o-mini
 
 ##################################################################
 # 10000 steps of SFT
 ##################################################################
-python scripts/inference_at_checkpoint.py \
-    --model_id google/gemma-3-4b-it \
-    --checkpoint checkpoints/SFT-gemma-3-4b-it-CulturalGround/checkpoint-10000 \
-    --output results/gemma-3-4b-it-sft-10000.jsonl \
-    --batch_size 32 \
-    --use_system_prompt
+python scripts/gpt_judge.py \
+    --results_file results/Qwen2.5-VL-3B-Instruct-sft-10000.jsonl \
+    --output results/Qwen2.5-VL-3B-Instruct-sft-10000-judge.json \
+    --model_id gpt-4o-mini
 
 ##################################################################
 # 15000 steps of SFT
 ##################################################################
-python scripts/inference_at_checkpoint.py \
-    --model_id google/gemma-3-4b-it \
-    --checkpoint checkpoints/SFT-gemma-3-4b-it-CulturalGround/checkpoint-15000 \
-    --output results/gemma-3-4b-it-sft-15000.jsonl \
-    --batch_size 32 \
-    --use_system_prompt
+python scripts/gpt_judge.py \
+    --results_file results/Qwen2.5-VL-3B-Instruct-sft-15000.jsonl \
+    --output results/Qwen2.5-VL-3B-Instruct-sft-15000-judge.json \
+    --model_id gpt-4o-mini
 
 ##################################################################
 # 20000 steps of SFT
 ##################################################################
-python scripts/inference_at_checkpoint.py \
-    --model_id google/gemma-3-4b-it \
-    --checkpoint checkpoints/SFT-gemma-3-4b-it-CulturalGround/checkpoint-20000 \
-    --output results/gemma-3-4b-it-sft-20000.jsonl \
-    --batch_size 32 \
-    --use_system_prompt
+python scripts/gpt_judge.py \
+    --results_file results/Qwen2.5-VL-3B-Instruct-sft-20000.jsonl \
+    --output results/Qwen2.5-VL-3B-Instruct-sft-20000-judge.json \
+    --model_id gpt-4o-mini
 
 echo "Job $SLURM_JOB_ID finished on $(hostname) at $(date)"

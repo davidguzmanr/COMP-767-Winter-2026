@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#SBATCH --job-name=inference_gemma-3-4b-it
+#SBATCH --job-name=inference_llava-onevision-qwen2-7b-si-hf
 #SBATCH --partition=long	
 #SBATCH --nodes=1
 #SBATCH --gres=gpu:a100l:1
@@ -42,18 +42,18 @@ cd /home/mila/g/guzmand/scratch/Repositories/COMP-767-Winter-2026
 # Base model
 ##################################################################
 python scripts/inference_at_checkpoint.py \
-    --model_id google/gemma-3-4b-it \
-    --output results/gemma-3-4b-it-base.jsonl \
-    --batch_size 32 \
+    --model_id llava-hf/llava-onevision-qwen2-7b-si-hf \
+    --output results/llava-onevision-qwen2-7b-si-hf-base.jsonl \
+    --batch_size 8 \
     --use_system_prompt
 
 ##################################################################
 # 5000 steps of SFT
 ##################################################################
 python scripts/inference_at_checkpoint.py \
-    --model_id google/gemma-3-4b-it \
-    --checkpoint checkpoints/SFT-gemma-3-4b-it-CulturalGround/checkpoint-5000 \
-    --output results/gemma-3-4b-it-sft-5000.jsonl \
+    --model_id llava-hf/llava-onevision-qwen2-7b-si-hf \
+    --checkpoint checkpoints/SFT-llava-onevision-qwen2-7b-si-hf-CulturalGround/checkpoint-5000 \
+    --output results/llava-onevision-qwen2-7b-si-hf-sft-5000.jsonl \
     --batch_size 32 \
     --use_system_prompt
 
@@ -61,9 +61,9 @@ python scripts/inference_at_checkpoint.py \
 # 10000 steps of SFT
 ##################################################################
 python scripts/inference_at_checkpoint.py \
-    --model_id google/gemma-3-4b-it \
-    --checkpoint checkpoints/SFT-gemma-3-4b-it-CulturalGround/checkpoint-10000 \
-    --output results/gemma-3-4b-it-sft-10000.jsonl \
+    --model_id llava-hf/llava-onevision-qwen2-7b-si-hf \
+    --checkpoint checkpoints/SFT-llava-onevision-qwen2-7b-si-hf-CulturalGround/checkpoint-10000 \
+    --output results/llava-onevision-qwen2-7b-si-hf-sft-10000.jsonl \
     --batch_size 32 \
     --use_system_prompt
 
@@ -71,9 +71,9 @@ python scripts/inference_at_checkpoint.py \
 # 15000 steps of SFT
 ##################################################################
 python scripts/inference_at_checkpoint.py \
-    --model_id google/gemma-3-4b-it \
-    --checkpoint checkpoints/SFT-gemma-3-4b-it-CulturalGround/checkpoint-15000 \
-    --output results/gemma-3-4b-it-sft-15000.jsonl \
+    --model_id llava-hf/llava-onevision-qwen2-7b-si-hf \
+    --checkpoint checkpoints/SFT-llava-onevision-qwen2-7b-si-hf-CulturalGround/checkpoint-15000 \
+    --output results/llava-onevision-qwen2-7b-si-hf-sft-15000.jsonl \
     --batch_size 32 \
     --use_system_prompt
 
@@ -81,9 +81,9 @@ python scripts/inference_at_checkpoint.py \
 # 20000 steps of SFT
 ##################################################################
 python scripts/inference_at_checkpoint.py \
-    --model_id google/gemma-3-4b-it \
-    --checkpoint checkpoints/SFT-gemma-3-4b-it-CulturalGround/checkpoint-20000 \
-    --output results/gemma-3-4b-it-sft-20000.jsonl \
+    --model_id llava-hf/llava-onevision-qwen2-7b-si-hf \
+    --checkpoint checkpoints/SFT-llava-onevision-qwen2-7b-si-hf-CulturalGround/checkpoint-20000 \
+    --output results/llava-onevision-qwen2-7b-si-hf-sft-20000.jsonl \
     --batch_size 32 \
     --use_system_prompt
 

@@ -52,6 +52,8 @@ def parse_args():
                             "has none (e.g. a pretrained base model). Example: pass "
                             "'google/gemma-3-4b-it' when evaluating 'google/gemma-3-4b-pt'."
                         ))
+    parser.add_argument("--debug", action="store_true",
+                        help="Load only the first 20 samples of the dataset for quick debugging.")
     return parser.parse_args()
 
 
@@ -65,6 +67,9 @@ def main():
     base_model_id = args.model_id
 
     ds = load_dataset("davidguzmanr/seeingculture-benchmark", split="test")
+    if args.debug:
+        ds = ds.select(range(20))
+        print("Debug mode: using first 20 samples.")
 
     model = AutoModelForImageTextToText.from_pretrained(
         base_model_id,
