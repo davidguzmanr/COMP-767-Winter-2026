@@ -125,7 +125,7 @@ def main():
                 "role": "user",
                 "content": [
                     {"type": "image"},
-                    {"type": "text", "text": example["Question"]}
+                    {"type": "text", "text": example["Question"] or ""}
                 ]
             })
             texts.append(processor.apply_chat_template(messages, add_generation_prompt=True))
