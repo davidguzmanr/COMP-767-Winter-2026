@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #SBATCH --job-name=inference_gemma-3-4b-it
-#SBATCH --partition=main	
+#SBATCH --partition=long	
 #SBATCH --nodes=1
 #SBATCH --gres=gpu:a100l:1
 #SBATCH --cpus-per-task=8

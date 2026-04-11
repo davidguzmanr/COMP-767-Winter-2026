@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #SBATCH --job-name=inference_llava-onevision-qwen2-7b-si-hf
-#SBATCH --partition=main	
+#SBATCH --partition=long	
 #SBATCH --nodes=1
 #SBATCH --gres=gpu:a100l:1
 #SBATCH --cpus-per-task=8
@@ -44,7 +44,7 @@ cd /home/mila/g/guzmand/scratch/Repositories/COMP-767-Winter-2026
 python scripts/inference_at_checkpoint.py \
     --model_id llava-hf/llava-onevision-qwen2-7b-si-hf \
     --output results/llava-onevision-qwen2-7b-si-hf-base.jsonl \
-    --batch_size 32 \
+    --batch_size 8 \
     --use_system_prompt
 
 ##################################################################
