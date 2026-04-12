@@ -248,11 +248,19 @@ if __name__ == "__main__":
     # DPOTrainer needs the processor to handle image inputs in the preference pairs.
     # Use the base model path so the processor is always loadable (adapters don't
     # ship a tokenizer/processor config).
-    processor = AutoProcessor.from_pretrained(
-        base_model_path,
-        trust_remote_code=model_args.trust_remote_code,
-        do_image_splitting=False,
-    )
+    try:
+        processor = AutoProcessor.from_pretrained(
+            base_model_path,
+            trust_remote_code=model_args.trust_remote_code,
+            do_image_splitting=False,
+        )
+    except TypeError:
+        # do_image_splitting is not accepted by all processors (e.g. Qwen3VLProcessor,
+        # MllamaProcessor).  Fall back to loading without it.
+        processor = AutoProcessor.from_pretrained(
+            base_model_path,
+            trust_remote_code=model_args.trust_remote_code,
+        )
     if not getattr(processor, "chat_template", None) and not getattr(processor.tokenizer, "chat_template", None):
         if cg_args.chat_template_source is None:
             raise ValueError(
