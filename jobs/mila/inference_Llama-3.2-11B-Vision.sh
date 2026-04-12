@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#SBATCH --job-name=inference_gemma-3-4b-pt
+#SBATCH --job-name=inference_Llama-3.2-11B-Vision
 #SBATCH --partition=long
 #SBATCH --nodes=1
 #SBATCH --gres=gpu:a100l:1
@@ -42,18 +42,18 @@ cd /home/mila/g/guzmand/scratch/Repositories/COMP-767-Winter-2026
 # Base model (no system prompt - pretrained model, no IT format)
 ##################################################################
 python scripts/inference_base.py \
-    --model_id google/gemma-3-4b-pt \
-    --output results/gemma-3-4b-pt-base.jsonl \
+    --model_id meta-llama/Llama-3.2-11B-Vision \
+    --output results/Llama-3.2-11B-Vision-base.jsonl \
     --batch_size 8
 
 ##################################################################
 # 4000 steps of SFT
 ##################################################################
 python scripts/inference_at_checkpoint.py \
-    --model_id google/gemma-3-4b-pt \
-    --chat_template_source google/gemma-3-4b-it \
-    --checkpoint checkpoints/SFT-gemma-3-4b-pt-CulturalGround/checkpoint-4000 \
-    --output results/gemma-3-4b-pt-sft-4000.jsonl \
+    --model_id meta-llama/Llama-3.2-11B-Vision \
+    --chat_template_source meta-llama/Llama-3.2-11B-Vision-Instruct \
+    --checkpoint checkpoints/SFT-Llama-3.2-11B-Vision-CulturalGround/checkpoint-4000 \
+    --output results/Llama-3.2-11B-Vision-sft-4000.jsonl \
     --batch_size 8 \
     --use_system_prompt
 
@@ -61,10 +61,10 @@ python scripts/inference_at_checkpoint.py \
 # 8000 steps of SFT
 ##################################################################
 python scripts/inference_at_checkpoint.py \
-    --model_id google/gemma-3-4b-pt \
-    --chat_template_source google/gemma-3-4b-it \
-    --checkpoint checkpoints/SFT-gemma-3-4b-pt-CulturalGround/checkpoint-8000 \
-    --output results/gemma-3-4b-pt-sft-8000.jsonl \
+    --model_id meta-llama/Llama-3.2-11B-Vision \
+    --chat_template_source meta-llama/Llama-3.2-11B-Vision-Instruct \
+    --checkpoint checkpoints/SFT-Llama-3.2-11B-Vision-CulturalGround/checkpoint-8000 \
+    --output results/Llama-3.2-11B-Vision-sft-8000.jsonl \
     --batch_size 8 \
     --use_system_prompt
 
@@ -72,10 +72,10 @@ python scripts/inference_at_checkpoint.py \
 # 12000 steps of SFT
 ##################################################################
 python scripts/inference_at_checkpoint.py \
-    --model_id google/gemma-3-4b-pt \
-    --chat_template_source google/gemma-3-4b-it \
-    --checkpoint checkpoints/SFT-gemma-3-4b-pt-CulturalGround/checkpoint-12000 \
-    --output results/gemma-3-4b-pt-sft-12000.jsonl \
+    --model_id meta-llama/Llama-3.2-11B-Vision \
+    --chat_template_source meta-llama/Llama-3.2-11B-Vision-Instruct \
+    --checkpoint checkpoints/SFT-Llama-3.2-11B-Vision-CulturalGround/checkpoint-12000 \
+    --output results/Llama-3.2-11B-Vision-sft-12000.jsonl \
     --batch_size 8 \
     --use_system_prompt
 
@@ -83,10 +83,10 @@ python scripts/inference_at_checkpoint.py \
 # 16000 steps of SFT
 ##################################################################
 python scripts/inference_at_checkpoint.py \
-    --model_id google/gemma-3-4b-pt \
-    --chat_template_source google/gemma-3-4b-it \
-    --checkpoint checkpoints/SFT-gemma-3-4b-pt-CulturalGround/checkpoint-16000 \
-    --output results/gemma-3-4b-pt-sft-16000.jsonl \
+    --model_id meta-llama/Llama-3.2-11B-Vision \
+    --chat_template_source meta-llama/Llama-3.2-11B-Vision-Instruct \
+    --checkpoint checkpoints/SFT-Llama-3.2-11B-Vision-CulturalGround/checkpoint-16000 \
+    --output results/Llama-3.2-11B-Vision-sft-16000.jsonl \
     --batch_size 8 \
     --use_system_prompt
 
@@ -94,10 +94,10 @@ python scripts/inference_at_checkpoint.py \
 # 20000 steps of SFT
 ##################################################################
 python scripts/inference_at_checkpoint.py \
-    --model_id google/gemma-3-4b-pt \
-    --chat_template_source google/gemma-3-4b-it \
-    --checkpoint checkpoints/SFT-gemma-3-4b-pt-CulturalGround/checkpoint-20000 \
-    --output results/gemma-3-4b-pt-sft-20000.jsonl \
+    --model_id meta-llama/Llama-3.2-11B-Vision \
+    --chat_template_source meta-llama/Llama-3.2-11B-Vision-Instruct \
+    --checkpoint checkpoints/SFT-Llama-3.2-11B-Vision-CulturalGround/checkpoint-20000 \
+    --output results/Llama-3.2-11B-Vision-sft-20000.jsonl \
     --batch_size 8 \
     --use_system_prompt
 
