@@ -63,6 +63,8 @@ def parse_args():
 def main():
     torch.manual_seed(42)
     torch.cuda.manual_seed_all(42)
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
 
     args = parse_args()
     output_file = args.output
@@ -119,9 +121,14 @@ def main():
 
     processor_class = type(processor).__name__
     if processor_class == "MllamaProcessor":
-        repetition_kwargs = {"no_repeat_ngram_size": 2}
+        # MllamaProcessor doesn't support repetition_penalty. no_repeat_ngram_size also
+        # crashes when apply_chat_template is used
+        repetition_kwargs = {"top_p": 0.9}
     else:
-        repetition_kwargs = {"repetition_penalty": 1.3}
+        repetition_kwargs = {
+            "repetition_penalty": 1.2,
+            "top_p": 0.9,
+        }
 
     os.makedirs(os.path.dirname(output_file), exist_ok=True)
     counter = 0
@@ -167,7 +174,8 @@ def main():
             outputs = model.generate(
                 **inputs,
                 max_new_tokens=512,
-                do_sample=False,
+                do_sample=True,
+                temperature=0.7,
                 eos_token_id=_eos_token_ids,
                 **repetition_kwargs,
             )
