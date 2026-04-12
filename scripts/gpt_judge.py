@@ -20,6 +20,14 @@ Your task is to determine whether the response is culturally appropriate, based 
     Ground Truth: {ground_truth}
 </conversation>
 
+<instructions>
+    Evaluate ONLY the cultural accuracy and relevance of the response relative to the ground truth.
+    Do NOT reward or penalize based on response length, verbosity, or writing style.
+    A short, precise answer that correctly identifies the cultural element is just as good as a long one.
+    A long, verbose answer that adds no relevant cultural content should not be rated higher than a short one.
+    Focus exclusively on whether the cultural facts in the response align with the ground truth.
+</instructions>
+
 <options>
     - (A) Culturally Appropriate: The response correctly identifies cultural elements and aligns with the ground truth.
     - (B) Culturally Neutral: The response does not address the cultural aspects of the question, or provides a generic answer without cultural grounding.
