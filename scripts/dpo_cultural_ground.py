@@ -293,7 +293,51 @@ if __name__ == "__main__":
     # LoRA checkpoint (which is already applied as a PeftModel above).
     peft_config = None if is_peft_checkpoint else get_peft_config(model_args)
 
-    trainer = DPOTrainer(
+    # Mllama (Llama 3.2 Vision) requires two fixes for DPO:
+    # 1. aspect_ratio_ids/aspect_ratio_mask are omitted from TRL's hardcoded
+    #    model_kwargs; patch model.forward to inject them on every call.
+    # 2. Image token IDs >= text vocab_size cause a CUDA assert in
+    #    selective_log_softmax; clamp labels to valid range first
+    #    See: https://huggingface.co/meta-llama/Llama-3.2-11B-Vision-Instruct/discussions/31
+    _model_type = getattr(model.config, "model_type", None)
+    if _model_type == "mllama":
+        import trl.trainer.dpo_trainer as _dpo_module
+        from trl.trainer.utils import selective_log_softmax as _orig_sls
+
+        def _safe_selective_log_softmax(logits, labels, *args, **kwargs):
+            labels = labels.clamp(0, logits.shape[-1] - 1)
+            return _orig_sls(logits, labels, *args, **kwargs)
+
+        _dpo_module.selective_log_softmax = _safe_selective_log_softmax
+
+        class VisionDPOTrainer(DPOTrainer):
+            _MLLAMA_EXTRA_KEYS = ("aspect_ratio_ids", "aspect_ratio_mask")
+
+            def compute_loss(self, model, inputs, return_outputs=False, num_items_in_batch=None):
+                extra = {k: inputs[k] for k in self._MLLAMA_EXTRA_KEYS if k in inputs}
+                if not extra:
+                    return super().compute_loss(model, inputs, return_outputs, num_items_in_batch)
+                patches = {}
+                for attr in ("model", "ref_model"):
+                    m = getattr(self, attr, None)
+                    if m is not None:
+                        orig = m.forward
+                        def _patched(*args, _orig=orig, _extra=extra, **kwargs):
+                            kwargs.update({k: v for k, v in _extra.items() if k not in kwargs})
+                            return _orig(*args, **kwargs)
+                        patches[attr] = (m, orig)
+                        m.forward = _patched
+                try:
+                    return super().compute_loss(model, inputs, return_outputs, num_items_in_batch)
+                finally:
+                    for m, orig in patches.values():
+                        m.forward = orig
+
+        trainer_cls = VisionDPOTrainer
+    else:
+        trainer_cls = DPOTrainer
+
+    trainer = trainer_cls(
         model,
         args=training_args,
         train_dataset=train_dataset,

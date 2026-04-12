@@ -45,10 +45,10 @@ accelerate launch --num_processes 2 --mixed_precision bf16 scripts/dpo_cultural_
     --chat_template_source google/gemma-3-4b-it \
     --output_dir checkpoints/DPO-gemma-3-4b-pt-CulturalGround \
     --num_train_epochs 1 \
-    --per_device_train_batch_size 1 \
-    --gradient_accumulation_steps 8 \
+    --per_device_train_batch_size 4 \
+    --gradient_accumulation_steps 1 \
     --gradient_checkpointing True \
-    --save_steps 100 \
+    --save_steps 250 \
     --beta 0.1 \
     --dtype bfloat16 \
     --attn_implementation sdpa \

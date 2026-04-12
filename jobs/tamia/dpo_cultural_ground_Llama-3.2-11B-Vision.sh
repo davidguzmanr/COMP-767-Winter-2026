@@ -47,10 +47,10 @@ accelerate launch --num_processes 4 --mixed_precision bf16 scripts/dpo_cultural_
     --chat_template_source meta-llama/Llama-3.2-11B-Vision-Instruct \
     --output_dir checkpoints/DPO-Llama-3.2-11B-Vision-CulturalGround \
     --num_train_epochs 1 \
-    --per_device_train_batch_size 1 \
-    --gradient_accumulation_steps 4 \
+    --per_device_train_batch_size 2 \
+    --gradient_accumulation_steps 1 \
     --gradient_checkpointing True \
-    --save_steps 100 \
+    --save_steps 250 \
     --beta 0.1 \
     --dtype bfloat16 \
     --attn_implementation sdpa \
