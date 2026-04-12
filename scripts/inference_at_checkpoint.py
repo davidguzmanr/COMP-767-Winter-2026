@@ -26,6 +26,31 @@ Examples:
         --checkpoint /path/to/checkpoint \
         --output results/gemma-3-12b-it-finetuned.jsonl \
         --batch_size 8
+
+    # Evaluate a raw pre-trained (non-instruction-tuned) base model
+    # Builds prompt: "{image_token}{question}\nResponse:" (Value Drifts paper)
+    python inference_at_checkpoint.py \
+        --model_id google/gemma-3-4b-pt \
+        --base_model \
+        --output results/gemma-3-4b-pt-base.jsonl
+
+    python inference_at_checkpoint.py \
+        --model_id Qwen/Qwen3.5-4B-Base \
+        --base_model \
+        --output results/Qwen3.5-4B-Base-base.jsonl
+
+    python inference_at_checkpoint.py \
+        --model_id meta-llama/Llama-3.2-11B-Vision \
+        --base_model \
+        --output results/Llama-3.2-11B-Vision-base.jsonl
+
+    # Evaluate an SFT checkpoint trained from a base model
+    # (use --chat_template_source, NOT --base_model — the model is now instruction-tuned)
+    python inference_at_checkpoint.py \
+        --model_id google/gemma-3-4b-pt \
+        --checkpoint checkpoints/SFT-gemma-3-4b-pt-CulturalGround/checkpoint-20000 \
+        --chat_template_source google/gemma-3-4b-it \
+        --output results/gemma-3-4b-pt-sft-20000.jsonl
 """
 import os
 import torch
@@ -35,6 +60,15 @@ from transformers import AutoProcessor, AutoModelForImageTextToText
 from peft import PeftModel
 import argparse
 from tqdm import tqdm
+
+# Fallback image placeholder tokens for base models that lack processor.image_token.
+# Used only when --base_model is set and apply_chat_template is skipped.
+_IMAGE_TOKEN_FALLBACK = {
+    "Gemma3Processor":  "<start_of_image>",
+    "MllamaProcessor":  "<|image|>",
+    "Qwen3VLProcessor": "<|vision_start|><|image_pad|><|vision_end|>",
+    "Qwen2VLProcessor": "<|vision_start|><|image_pad|><|vision_end|>",
+}
 
 
 def parse_args():
@@ -54,6 +88,13 @@ def parse_args():
                         ))
     parser.add_argument("--debug", action="store_true",
                         help="Load only the first 20 samples of the dataset for quick debugging.")
+    parser.add_argument("--base_model", action="store_true",
+                        help=(
+                            "Model is a pre-trained (non-instruction-tuned) base model. "
+                            "Skips apply_chat_template and builds a raw continuation prompt: "
+                            "'{image_token}{question}\\nResponse:' following the Value Drifts paper. "
+                            "Incompatible with --use_system_prompt."
+                        ))
     return parser.parse_args()
 
 
@@ -62,6 +103,10 @@ def main():
     torch.cuda.manual_seed_all(42)
 
     args = parse_args()
+
+    if args.base_model and args.use_system_prompt:
+        raise ValueError("--base_model and --use_system_prompt are mutually exclusive.")
+
     output_file = args.output
     batch_size = args.batch_size
     base_model_id = args.model_id
@@ -83,17 +128,19 @@ def main():
     else:
         print("No checkpoint provided — evaluating base model.")
     processor = AutoProcessor.from_pretrained(base_model_id)
-    if not getattr(processor, "chat_template", None) and not getattr(processor.tokenizer, "chat_template", None):
-        if args.chat_template_source is None:
-            raise ValueError(
-                "The model's processor has no chat_template. For pretrained (base) models, "
-                "pass --chat_template_source <it-model-id> (e.g. 'google/gemma-3-4b-it')."
-            )
-        _ct_processor = AutoProcessor.from_pretrained(args.chat_template_source)
-        _chat_template = _ct_processor.tokenizer.chat_template
-        processor.chat_template = _chat_template
-        processor.tokenizer.chat_template = _chat_template
-        print(f"Injected chat template from '{args.chat_template_source}' into base model processor.")
+    if not args.base_model:
+        if not getattr(processor, "chat_template", None) and not getattr(processor.tokenizer, "chat_template", None):
+            if args.chat_template_source is None:
+                raise ValueError(
+                    "The model's processor has no chat_template. For pretrained (base) models "
+                    "evaluated with a chat format, pass --chat_template_source <it-model-id> "
+                    "(e.g. 'google/gemma-3-4b-it'). For raw base model inference, use --base_model."
+                )
+            _ct_processor = AutoProcessor.from_pretrained(args.chat_template_source)
+            _chat_template = _ct_processor.tokenizer.chat_template
+            processor.chat_template = _chat_template
+            processor.tokenizer.chat_template = _chat_template
+            print(f"Injected chat template from '{args.chat_template_source}' into base model processor.")
     if getattr(processor.tokenizer, "padding_side", None) != "left":
         processor.tokenizer.padding_side = "left"
     model.eval()
@@ -112,23 +159,33 @@ def main():
 
         texts, images = [], []
         for example in batch:
-            messages = []
-            if args.use_system_prompt:
+            if args.base_model:
+                # Raw continuation prompt for pre-trained base models (no chat template).
+                # Follows the Value Drifts paper: append "Response:" so the model
+                # treats the query as an instruction to complete.
+                image_token = getattr(processor, "image_token", None) or _IMAGE_TOKEN_FALLBACK.get(
+                    type(processor).__name__, "<image>"
+                )
+                text = f"{image_token}{example['Question'] or ''}\nResponse:"
+            else:
+                messages = []
+                if args.use_system_prompt:
+                    messages.append({
+                        "role": "system",
+                        "content": (
+                            f"You are a helpful assistant with expertise in {example['Country']} culture. "
+                            f"When answering questions, consider the cultural context of {example['Country']}."
+                        )
+                    })
                 messages.append({
-                    "role": "system",
-                    "content": (
-                        f"You are a helpful assistant with expertise in {example['Country']} culture. "
-                        f"When answering questions, consider the cultural context of {example['Country']}."
-                    )
+                    "role": "user",
+                    "content": [
+                        {"type": "image"},
+                        {"type": "text", "text": example["Question"] or ""}
+                    ]
                 })
-            messages.append({
-                "role": "user",
-                "content": [
-                    {"type": "image"},
-                    {"type": "text", "text": example["Question"] or ""}
-                ]
-            })
-            texts.append(processor.apply_chat_template(messages, add_generation_prompt=True))
+                text = processor.apply_chat_template(messages, add_generation_prompt=True)
+            texts.append(text)
             images.append(example["Image"].convert("RGB"))
 
         inputs = processor(
