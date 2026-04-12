@@ -107,6 +107,16 @@ def main():
         processor.tokenizer.padding_side = "left"
     model.eval()
 
+    # Llama-3 chat templates end each turn with <|eot_id|>, which is NOT the
+    # default eos_token. Without it as a stop signal, generation loops forever
+    # repeating assistant turns. Only add it for Llama family models; Gemma and
+    # Qwen use their own eos tokens correctly out of the box.
+    _eos_token_ids = [processor.tokenizer.eos_token_id]
+    if "llama" in base_model_id.lower():
+        eot_id = processor.tokenizer.convert_tokens_to_ids("<|eot_id|>")
+        if eot_id != processor.tokenizer.unk_token_id:
+            _eos_token_ids.append(eot_id)
+
     os.makedirs(os.path.dirname(output_file), exist_ok=True)
     counter = 0
     results = []
@@ -152,6 +162,7 @@ def main():
                 **inputs,
                 max_new_tokens=512,
                 do_sample=False,
+                eos_token_id=_eos_token_ids,
             )
 
         input_len = inputs.input_ids.shape[-1]
