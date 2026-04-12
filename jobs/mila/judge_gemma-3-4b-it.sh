@@ -41,40 +41,40 @@ cd /home/mila/g/guzmand/scratch/Repositories/COMP-767-Winter-2026
 # Base model
 ##################################################################
 python scripts/gpt_judge.py \
-    --results_file results/gemma-3-4b-it-base.jsonl \
-    --output results/gemma-3-4b-it-base-judge.json \
+    --results_file results/gemma-3-4b-it/gemma-3-4b-it-base.jsonl \
+    --output results/gemma-3-4b-it/gemma-3-4b-it-base-judge.json \
     --model_id gpt-4o-mini
 
 ##################################################################
 # 5000 steps of SFT
 ##################################################################
 python scripts/gpt_judge.py \
-    --results_file results/gemma-3-4b-it-sft-5000.jsonl \
-    --output results/gemma-3-4b-it-sft-5000-judge.json \
+    --results_file results/gemma-3-4b-it/gemma-3-4b-it-sft-5000.jsonl \
+    --output results/gemma-3-4b-it/gemma-3-4b-it-sft-5000-judge.json \
     --model_id gpt-4o-mini
 
 ##################################################################
 # 10000 steps of SFT
 ##################################################################
 python scripts/gpt_judge.py \
-    --results_file results/gemma-3-4b-it-sft-10000.jsonl \
-    --output results/gemma-3-4b-it-sft-10000-judge.json \
+    --results_file results/gemma-3-4b-it/gemma-3-4b-it-sft-10000.jsonl \
+    --output results/gemma-3-4b-it/gemma-3-4b-it-sft-10000-judge.json \
     --model_id gpt-4o-mini
 
 ##################################################################
 # 15000 steps of SFT
 ##################################################################
 python scripts/gpt_judge.py \
-    --results_file results/gemma-3-4b-it-sft-15000.jsonl \
-    --output results/gemma-3-4b-it-sft-15000-judge.json \
+    --results_file results/gemma-3-4b-it/gemma-3-4b-it-sft-15000.jsonl \
+    --output results/gemma-3-4b-it/gemma-3-4b-it-sft-15000-judge.json \
     --model_id gpt-4o-mini
 
 ##################################################################
 # 20000 steps of SFT
 ##################################################################
 python scripts/gpt_judge.py \
-    --results_file results/gemma-3-4b-it-sft-20000.jsonl \
-    --output results/gemma-3-4b-it-sft-20000-judge.json \
+    --results_file results/gemma-3-4b-it/gemma-3-4b-it-sft-20000.jsonl \
+    --output results/gemma-3-4b-it/gemma-3-4b-it-sft-20000-judge.json \
     --model_id gpt-4o-mini
 
 

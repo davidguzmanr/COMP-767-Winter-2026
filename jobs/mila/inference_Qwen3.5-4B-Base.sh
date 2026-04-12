@@ -43,7 +43,7 @@ cd /home/mila/g/guzmand/scratch/Repositories/COMP-767-Winter-2026
 ##################################################################
 python scripts/inference_base.py \
     --model_id Qwen/Qwen3.5-4B-Base \
-    --output results/Qwen3.5-4B-Base-base.jsonl \
+    --output results/Qwen3.5-4B-Base/Qwen3.5-4B-Base-base.jsonl \
     --batch_size 8
 
 ##################################################################
@@ -53,7 +53,7 @@ python scripts/inference_at_checkpoint.py \
     --model_id Qwen/Qwen3.5-4B-Base \
     --chat_template_source Qwen/Qwen3.5-4B \
     --checkpoint checkpoints/SFT-Qwen3.5-4B-Base-CulturalGround/checkpoint-4000 \
-    --output results/Qwen3.5-4B-Base-sft-4000.jsonl \
+    --output results/Qwen3.5-4B-Base/Qwen3.5-4B-Base-sft-4000.jsonl \
     --batch_size 8 \
     --use_system_prompt
 
@@ -64,7 +64,7 @@ python scripts/inference_at_checkpoint.py \
     --model_id Qwen/Qwen3.5-4B-Base \
     --chat_template_source Qwen/Qwen3.5-4B \
     --checkpoint checkpoints/SFT-Qwen3.5-4B-Base-CulturalGround/checkpoint-8000 \
-    --output results/Qwen3.5-4B-Base-sft-8000.jsonl \
+    --output results/Qwen3.5-4B-Base/Qwen3.5-4B-Base-sft-8000.jsonl \
     --batch_size 8 \
     --use_system_prompt
 
@@ -75,7 +75,7 @@ python scripts/inference_at_checkpoint.py \
     --model_id Qwen/Qwen3.5-4B-Base \
     --chat_template_source Qwen/Qwen3.5-4B \
     --checkpoint checkpoints/SFT-Qwen3.5-4B-Base-CulturalGround/checkpoint-12000 \
-    --output results/Qwen3.5-4B-Base-sft-12000.jsonl \
+    --output results/Qwen3.5-4B-Base/Qwen3.5-4B-Base-sft-12000.jsonl \
     --batch_size 8 \
     --use_system_prompt
 
@@ -86,7 +86,7 @@ python scripts/inference_at_checkpoint.py \
     --model_id Qwen/Qwen3.5-4B-Base \
     --chat_template_source Qwen/Qwen3.5-4B \
     --checkpoint checkpoints/SFT-Qwen3.5-4B-Base-CulturalGround/checkpoint-16000 \
-    --output results/Qwen3.5-4B-Base-sft-16000.jsonl \
+    --output results/Qwen3.5-4B-Base/Qwen3.5-4B-Base-sft-16000.jsonl \
     --batch_size 8 \
     --use_system_prompt
 
@@ -97,7 +97,7 @@ python scripts/inference_at_checkpoint.py \
     --model_id Qwen/Qwen3.5-4B-Base \
     --chat_template_source Qwen/Qwen3.5-4B \
     --checkpoint checkpoints/SFT-Qwen3.5-4B-Base-CulturalGround/checkpoint-20000 \
-    --output results/Qwen3.5-4B-Base-sft-20000.jsonl \
+    --output results/Qwen3.5-4B-Base/Qwen3.5-4B-Base-sft-20000.jsonl \
     --batch_size 8 \
     --use_system_prompt
 

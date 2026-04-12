@@ -41,40 +41,40 @@ cd /home/mila/g/guzmand/scratch/Repositories/COMP-767-Winter-2026
 # Base model
 ##################################################################
 python scripts/gpt_judge.py \
-    --results_file results/Qwen2.5-VL-3B-Instruct-base.jsonl \
-    --output results/Qwen2.5-VL-3B-Instruct-base-judge.json \
+    --results_file results/Qwen2.5-VL-3B-Instruct/Qwen2.5-VL-3B-Instruct-base.jsonl \
+    --output results/Qwen2.5-VL-3B-Instruct/Qwen2.5-VL-3B-Instruct-base-judge.json \
     --model_id gpt-4o-mini
 
 ##################################################################
 # 5000 steps of SFT
 ##################################################################
 python scripts/gpt_judge.py \
-    --results_file results/Qwen2.5-VL-3B-Instruct-sft-5000.jsonl \
-    --output results/Qwen2.5-VL-3B-Instruct-sft-5000-judge.json \
+    --results_file results/Qwen2.5-VL-3B-Instruct/Qwen2.5-VL-3B-Instruct-sft-5000.jsonl \
+    --output results/Qwen2.5-VL-3B-Instruct/Qwen2.5-VL-3B-Instruct-sft-5000-judge.json \
     --model_id gpt-4o-mini
 
 ##################################################################
 # 10000 steps of SFT
 ##################################################################
 python scripts/gpt_judge.py \
-    --results_file results/Qwen2.5-VL-3B-Instruct-sft-10000.jsonl \
-    --output results/Qwen2.5-VL-3B-Instruct-sft-10000-judge.json \
+    --results_file results/Qwen2.5-VL-3B-Instruct/Qwen2.5-VL-3B-Instruct-sft-10000.jsonl \
+    --output results/Qwen2.5-VL-3B-Instruct/Qwen2.5-VL-3B-Instruct-sft-10000-judge.json \
     --model_id gpt-4o-mini
 
 ##################################################################
 # 15000 steps of SFT
 ##################################################################
 python scripts/gpt_judge.py \
-    --results_file results/Qwen2.5-VL-3B-Instruct-sft-15000.jsonl \
-    --output results/Qwen2.5-VL-3B-Instruct-sft-15000-judge.json \
+    --results_file results/Qwen2.5-VL-3B-Instruct/Qwen2.5-VL-3B-Instruct-sft-15000.jsonl \
+    --output results/Qwen2.5-VL-3B-Instruct/Qwen2.5-VL-3B-Instruct-sft-15000-judge.json \
     --model_id gpt-4o-mini
 
 ##################################################################
 # 20000 steps of SFT
 ##################################################################
 python scripts/gpt_judge.py \
-    --results_file results/Qwen2.5-VL-3B-Instruct-sft-20000.jsonl \
-    --output results/Qwen2.5-VL-3B-Instruct-sft-20000-judge.json \
+    --results_file results/Qwen2.5-VL-3B-Instruct/Qwen2.5-VL-3B-Instruct-sft-20000.jsonl \
+    --output results/Qwen2.5-VL-3B-Instruct/Qwen2.5-VL-3B-Instruct-sft-20000-judge.json \
     --model_id gpt-4o-mini
 
 echo "Job $SLURM_JOB_ID finished on $(hostname) at $(date)"

@@ -43,7 +43,7 @@ cd /home/mila/g/guzmand/scratch/Repositories/COMP-767-Winter-2026
 ##################################################################
 python scripts/inference_base.py \
     --model_id google/gemma-3-4b-pt \
-    --output results/gemma-3-4b-pt-base.jsonl \
+    --output results/gemma-3-4b-pt/gemma-3-4b-pt-base.jsonl \
     --batch_size 8
 
 ##################################################################
@@ -53,7 +53,7 @@ python scripts/inference_at_checkpoint.py \
     --model_id google/gemma-3-4b-pt \
     --chat_template_source google/gemma-3-4b-it \
     --checkpoint checkpoints/SFT-gemma-3-4b-pt-CulturalGround/checkpoint-4000 \
-    --output results/gemma-3-4b-pt-sft-4000.jsonl \
+    --output results/gemma-3-4b-pt/gemma-3-4b-pt-sft-4000.jsonl \
     --batch_size 8 \
     --use_system_prompt
 
@@ -64,7 +64,7 @@ python scripts/inference_at_checkpoint.py \
     --model_id google/gemma-3-4b-pt \
     --chat_template_source google/gemma-3-4b-it \
     --checkpoint checkpoints/SFT-gemma-3-4b-pt-CulturalGround/checkpoint-8000 \
-    --output results/gemma-3-4b-pt-sft-8000.jsonl \
+    --output results/gemma-3-4b-pt/gemma-3-4b-pt-sft-8000.jsonl \
     --batch_size 8 \
     --use_system_prompt
 
@@ -75,7 +75,7 @@ python scripts/inference_at_checkpoint.py \
     --model_id google/gemma-3-4b-pt \
     --chat_template_source google/gemma-3-4b-it \
     --checkpoint checkpoints/SFT-gemma-3-4b-pt-CulturalGround/checkpoint-12000 \
-    --output results/gemma-3-4b-pt-sft-12000.jsonl \
+    --output results/gemma-3-4b-pt/gemma-3-4b-pt-sft-12000.jsonl \
     --batch_size 8 \
     --use_system_prompt
 
@@ -86,7 +86,7 @@ python scripts/inference_at_checkpoint.py \
     --model_id google/gemma-3-4b-pt \
     --chat_template_source google/gemma-3-4b-it \
     --checkpoint checkpoints/SFT-gemma-3-4b-pt-CulturalGround/checkpoint-16000 \
-    --output results/gemma-3-4b-pt-sft-16000.jsonl \
+    --output results/gemma-3-4b-pt/gemma-3-4b-pt-sft-16000.jsonl \
     --batch_size 8 \
     --use_system_prompt
 
@@ -97,7 +97,7 @@ python scripts/inference_at_checkpoint.py \
     --model_id google/gemma-3-4b-pt \
     --chat_template_source google/gemma-3-4b-it \
     --checkpoint checkpoints/SFT-gemma-3-4b-pt-CulturalGround/checkpoint-20000 \
-    --output results/gemma-3-4b-pt-sft-20000.jsonl \
+    --output results/gemma-3-4b-pt/gemma-3-4b-pt-sft-20000.jsonl \
     --batch_size 8 \
     --use_system_prompt
 

@@ -43,7 +43,7 @@ cd /home/mila/g/guzmand/scratch/Repositories/COMP-767-Winter-2026
 ##################################################################
 python scripts/inference_at_checkpoint.py \
     --model_id llava-hf/llava-onevision-qwen2-7b-si-hf \
-    --output results/llava-onevision-qwen2-7b-si-hf-base.jsonl \
+    --output results/llava-onevision-qwen2-7b-si-hf/llava-onevision-qwen2-7b-si-hf-base.jsonl \
     --batch_size 8 \
     --use_system_prompt
 
@@ -53,7 +53,7 @@ python scripts/inference_at_checkpoint.py \
 python scripts/inference_at_checkpoint.py \
     --model_id llava-hf/llava-onevision-qwen2-7b-si-hf \
     --checkpoint checkpoints/SFT-llava-onevision-qwen2-7b-si-hf-CulturalGround/checkpoint-5000 \
-    --output results/llava-onevision-qwen2-7b-si-hf-sft-5000.jsonl \
+    --output results/llava-onevision-qwen2-7b-si-hf/llava-onevision-qwen2-7b-si-hf-sft-5000.jsonl \
     --batch_size 8 \
     --use_system_prompt
 
@@ -63,7 +63,7 @@ python scripts/inference_at_checkpoint.py \
 python scripts/inference_at_checkpoint.py \
     --model_id llava-hf/llava-onevision-qwen2-7b-si-hf \
     --checkpoint checkpoints/SFT-llava-onevision-qwen2-7b-si-hf-CulturalGround/checkpoint-10000 \
-    --output results/llava-onevision-qwen2-7b-si-hf-sft-10000.jsonl \
+    --output results/llava-onevision-qwen2-7b-si-hf/llava-onevision-qwen2-7b-si-hf-sft-10000.jsonl \
     --batch_size 8 \
     --use_system_prompt
 
@@ -73,7 +73,7 @@ python scripts/inference_at_checkpoint.py \
 python scripts/inference_at_checkpoint.py \
     --model_id llava-hf/llava-onevision-qwen2-7b-si-hf \
     --checkpoint checkpoints/SFT-llava-onevision-qwen2-7b-si-hf-CulturalGround/checkpoint-15000 \
-    --output results/llava-onevision-qwen2-7b-si-hf-sft-15000.jsonl \
+    --output results/llava-onevision-qwen2-7b-si-hf/llava-onevision-qwen2-7b-si-hf-sft-15000.jsonl \
     --batch_size 8 \
     --use_system_prompt
 
@@ -83,7 +83,7 @@ python scripts/inference_at_checkpoint.py \
 python scripts/inference_at_checkpoint.py \
     --model_id llava-hf/llava-onevision-qwen2-7b-si-hf \
     --checkpoint checkpoints/SFT-llava-onevision-qwen2-7b-si-hf-CulturalGround/checkpoint-20000 \
-    --output results/llava-onevision-qwen2-7b-si-hf-sft-20000.jsonl \
+    --output results/llava-onevision-qwen2-7b-si-hf/llava-onevision-qwen2-7b-si-hf-sft-20000.jsonl \
     --batch_size 8 \
     --use_system_prompt
 

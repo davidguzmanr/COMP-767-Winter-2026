@@ -43,7 +43,7 @@ cd /home/mila/g/guzmand/scratch/Repositories/COMP-767-Winter-2026
 ##################################################################
 python scripts/inference_at_checkpoint.py \
     --model_id Qwen/Qwen2.5-VL-3B-Instruct \
-    --output results/Qwen2.5-VL-3B-Instruct-base.jsonl \
+    --output results/Qwen2.5-VL-3B-Instruct/Qwen2.5-VL-3B-Instruct-base.jsonl \
     --batch_size 32 \
     --use_system_prompt
 
@@ -53,7 +53,7 @@ python scripts/inference_at_checkpoint.py \
 python scripts/inference_at_checkpoint.py \
     --model_id Qwen/Qwen2.5-VL-3B-Instruct \
     --checkpoint checkpoints/SFT-Qwen2-5-VL-3B-Instruct-CulturalGround/checkpoint-5000 \
-    --output results/Qwen2.5-VL-3B-Instruct-sft-5000.jsonl \
+    --output results/Qwen2.5-VL-3B-Instruct/Qwen2.5-VL-3B-Instruct-sft-5000.jsonl \
     --batch_size 32 \
     --use_system_prompt
 
@@ -63,7 +63,7 @@ python scripts/inference_at_checkpoint.py \
 python scripts/inference_at_checkpoint.py \
     --model_id Qwen/Qwen2.5-VL-3B-Instruct \
     --checkpoint checkpoints/SFT-Qwen2-5-VL-3B-Instruct-CulturalGround/checkpoint-10000 \
-    --output results/Qwen2.5-VL-3B-Instruct-sft-10000.jsonl \
+    --output results/Qwen2.5-VL-3B-Instruct/Qwen2.5-VL-3B-Instruct-sft-10000.jsonl \
     --batch_size 32 \
     --use_system_prompt
 
@@ -73,7 +73,7 @@ python scripts/inference_at_checkpoint.py \
 python scripts/inference_at_checkpoint.py \
     --model_id Qwen/Qwen2.5-VL-3B-Instruct \
     --checkpoint checkpoints/SFT-Qwen2-5-VL-3B-Instruct-CulturalGround/checkpoint-15000 \
-    --output results/Qwen2.5-VL-3B-Instruct-sft-15000.jsonl \
+    --output results/Qwen2.5-VL-3B-Instruct/Qwen2.5-VL-3B-Instruct-sft-15000.jsonl \
     --batch_size 32 \
     --use_system_prompt
 
@@ -83,7 +83,7 @@ python scripts/inference_at_checkpoint.py \
 python scripts/inference_at_checkpoint.py \
     --model_id Qwen/Qwen2.5-VL-3B-Instruct \
     --checkpoint checkpoints/SFT-Qwen2-5-VL-3B-Instruct-CulturalGround/checkpoint-20000 \
-    --output results/Qwen2.5-VL-3B-Instruct-sft-20000.jsonl \
+    --output results/Qwen2.5-VL-3B-Instruct/Qwen2.5-VL-3B-Instruct-sft-20000.jsonl \
     --batch_size 32 \
     --use_system_prompt
 

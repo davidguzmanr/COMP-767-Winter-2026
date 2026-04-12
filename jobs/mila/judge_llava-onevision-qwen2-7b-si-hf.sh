@@ -41,40 +41,40 @@ cd /home/mila/g/guzmand/scratch/Repositories/COMP-767-Winter-2026
 # Base model
 ##################################################################
 python scripts/gpt_judge.py \
-    --results_file results/llava-onevision-qwen2-7b-si-hf-base.jsonl \
-    --output results/llava-onevision-qwen2-7b-si-hf-base-judge.json \
+    --results_file results/llava-onevision-qwen2-7b-si-hf/llava-onevision-qwen2-7b-si-hf-base.jsonl \
+    --output results/llava-onevision-qwen2-7b-si-hf/llava-onevision-qwen2-7b-si-hf-base-judge.json \
     --model_id gpt-4o-mini
 
 ##################################################################
 # 5000 steps of SFT
 ##################################################################
 python scripts/gpt_judge.py \
-    --results_file results/llava-onevision-qwen2-7b-si-hf-sft-5000.jsonl \
-    --output results/llava-onevision-qwen2-7b-si-hf-sft-5000-judge.json \
+    --results_file results/llava-onevision-qwen2-7b-si-hf/llava-onevision-qwen2-7b-si-hf-sft-5000.jsonl \
+    --output results/llava-onevision-qwen2-7b-si-hf/llava-onevision-qwen2-7b-si-hf-sft-5000-judge.json \
     --model_id gpt-4o-mini
 
 ##################################################################
 # 10000 steps of SFT
 ##################################################################
 python scripts/gpt_judge.py \
-    --results_file results/llava-onevision-qwen2-7b-si-hf-sft-10000.jsonl \
-    --output results/llava-onevision-qwen2-7b-si-hf-sft-10000-judge.json \
+    --results_file results/llava-onevision-qwen2-7b-si-hf/llava-onevision-qwen2-7b-si-hf-sft-10000.jsonl \
+    --output results/llava-onevision-qwen2-7b-si-hf/llava-onevision-qwen2-7b-si-hf-sft-10000-judge.json \
     --model_id gpt-4o-mini
 
 ##################################################################
 # 15000 steps of SFT
 ##################################################################
 python scripts/gpt_judge.py \
-    --results_file results/llava-onevision-qwen2-7b-si-hf-sft-15000.jsonl \
-    --output results/llava-onevision-qwen2-7b-si-hf-sft-15000-judge.json \
+    --results_file results/llava-onevision-qwen2-7b-si-hf/llava-onevision-qwen2-7b-si-hf-sft-15000.jsonl \
+    --output results/llava-onevision-qwen2-7b-si-hf/llava-onevision-qwen2-7b-si-hf-sft-15000-judge.json \
     --model_id gpt-4o-mini
 
 ##################################################################
 # 20000 steps of SFT
 ##################################################################
 python scripts/gpt_judge.py \
-    --results_file results/llava-onevision-qwen2-7b-si-hf-sft-20000.jsonl \
-    --output results/llava-onevision-qwen2-7b-si-hf-sft-20000-judge.json \
+    --results_file results/llava-onevision-qwen2-7b-si-hf/llava-onevision-qwen2-7b-si-hf-sft-20000.jsonl \
+    --output results/llava-onevision-qwen2-7b-si-hf/llava-onevision-qwen2-7b-si-hf-sft-20000-judge.json \
     --model_id gpt-4o-mini
 
 echo "Job $SLURM_JOB_ID finished on $(hostname) at $(date)"

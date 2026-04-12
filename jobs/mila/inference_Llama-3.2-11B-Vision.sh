@@ -43,7 +43,7 @@ cd /home/mila/g/guzmand/scratch/Repositories/COMP-767-Winter-2026
 ##################################################################
 python scripts/inference_base.py \
     --model_id meta-llama/Llama-3.2-11B-Vision \
-    --output results/Llama-3.2-11B-Vision-base.jsonl \
+    --output results/Llama-3.2-11B-Vision/Llama-3.2-11B-Vision-base.jsonl \
     --batch_size 8
 
 ##################################################################
@@ -53,7 +53,7 @@ python scripts/inference_at_checkpoint.py \
     --model_id meta-llama/Llama-3.2-11B-Vision \
     --chat_template_source meta-llama/Llama-3.2-11B-Vision-Instruct \
     --checkpoint checkpoints/SFT-Llama-3.2-11B-Vision-CulturalGround/checkpoint-4000 \
-    --output results/Llama-3.2-11B-Vision-sft-4000.jsonl \
+    --output results/Llama-3.2-11B-Vision/Llama-3.2-11B-Vision-sft-4000.jsonl \
     --batch_size 8 \
     --use_system_prompt
 
@@ -64,7 +64,7 @@ python scripts/inference_at_checkpoint.py \
     --model_id meta-llama/Llama-3.2-11B-Vision \
     --chat_template_source meta-llama/Llama-3.2-11B-Vision-Instruct \
     --checkpoint checkpoints/SFT-Llama-3.2-11B-Vision-CulturalGround/checkpoint-8000 \
-    --output results/Llama-3.2-11B-Vision-sft-8000.jsonl \
+    --output results/Llama-3.2-11B-Vision/Llama-3.2-11B-Vision-sft-8000.jsonl \
     --batch_size 8 \
     --use_system_prompt
 
@@ -75,7 +75,7 @@ python scripts/inference_at_checkpoint.py \
     --model_id meta-llama/Llama-3.2-11B-Vision \
     --chat_template_source meta-llama/Llama-3.2-11B-Vision-Instruct \
     --checkpoint checkpoints/SFT-Llama-3.2-11B-Vision-CulturalGround/checkpoint-12000 \
-    --output results/Llama-3.2-11B-Vision-sft-12000.jsonl \
+    --output results/Llama-3.2-11B-Vision/Llama-3.2-11B-Vision-sft-12000.jsonl \
     --batch_size 8 \
     --use_system_prompt
 
@@ -86,7 +86,7 @@ python scripts/inference_at_checkpoint.py \
     --model_id meta-llama/Llama-3.2-11B-Vision \
     --chat_template_source meta-llama/Llama-3.2-11B-Vision-Instruct \
     --checkpoint checkpoints/SFT-Llama-3.2-11B-Vision-CulturalGround/checkpoint-16000 \
-    --output results/Llama-3.2-11B-Vision-sft-16000.jsonl \
+    --output results/Llama-3.2-11B-Vision/Llama-3.2-11B-Vision-sft-16000.jsonl \
     --batch_size 8 \
     --use_system_prompt
 
@@ -97,7 +97,7 @@ python scripts/inference_at_checkpoint.py \
     --model_id meta-llama/Llama-3.2-11B-Vision \
     --chat_template_source meta-llama/Llama-3.2-11B-Vision-Instruct \
     --checkpoint checkpoints/SFT-Llama-3.2-11B-Vision-CulturalGround/checkpoint-20000 \
-    --output results/Llama-3.2-11B-Vision-sft-20000.jsonl \
+    --output results/Llama-3.2-11B-Vision/Llama-3.2-11B-Vision-sft-20000.jsonl \
     --batch_size 8 \
     --use_system_prompt
 
