@@ -117,6 +117,12 @@ def main():
         if eot_id != processor.tokenizer.unk_token_id:
             _eos_token_ids.append(eot_id)
 
+    processor_class = type(processor).__name__
+    if processor_class == "MllamaProcessor":
+        repetition_kwargs = {"no_repeat_ngram_size": 2}
+    else:
+        repetition_kwargs = {"repetition_penalty": 1.3}
+
     os.makedirs(os.path.dirname(output_file), exist_ok=True)
     counter = 0
     results = []
@@ -163,6 +169,7 @@ def main():
                 max_new_tokens=512,
                 do_sample=False,
                 eos_token_id=_eos_token_ids,
+                **repetition_kwargs,
             )
 
         input_len = inputs.input_ids.shape[-1]

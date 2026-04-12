@@ -100,7 +100,7 @@ def main():
     if processor_class == "MllamaProcessor":
         repetition_kwargs = {"no_repeat_ngram_size": 2}
     else:
-        repetition_kwargs = {"repetition_penalty": 1.5}
+        repetition_kwargs = {"repetition_penalty": 1.3}
 
     os.makedirs(os.path.dirname(output_file), exist_ok=True)
     counter = 0
