@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
 import argparse
-import base64
 import json
 import os
 import time
-from io import BytesIO
 
 from datasets import load_dataset
 from openai import OpenAI, RateLimitError
@@ -46,12 +44,6 @@ def parse_args():
     return parser.parse_args()
 
 
-def encode_image_to_base64(pil_image):
-    buffer = BytesIO()
-    pil_image.convert("RGB").save(buffer, format="JPEG")
-    return base64.b64encode(buffer.getvalue()).decode("utf-8")
-
-
 def main():
     args = parse_args()
     client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
@@ -79,7 +71,7 @@ def main():
     for example in tqdm(ds, desc="Judging"):
         unique_idx = example["Unique Index"]
 
-        ground_truth, country, pil_image = idx_to_data[unique_idx]
+        ground_truth, country, _ = idx_to_data[unique_idx]
         pred_data = idx_to_prediction[unique_idx]
         prediction = pred_data["Prediction"]
         question = pred_data["Question"]
@@ -87,27 +79,15 @@ def main():
         checkpoint = pred_data["Checkpoint"]
         system_prompt = pred_data["System Prompt"]
 
-        image_b64 = encode_image_to_base64(pil_image)
         messages = [
             {
                 "role": "user",
-                "content": [
-                    {
-                        "type": "image_url",
-                        "image_url": {
-                            "url": f"data:image/jpeg;base64,{image_b64}"
-                        },
-                    },
-                    {
-                        "type": "text",
-                        "text": EVALUATION_PROMPT.format(
-                            country=country,
-                            question=question,
-                            prediction=prediction,
-                            ground_truth=ground_truth,
-                        ),
-                    },
-                ],
+                "content": EVALUATION_PROMPT.format(
+                    country=country,
+                    question=question,
+                    prediction=prediction,
+                    ground_truth=ground_truth,
+                ),
             },
         ]
 
