@@ -85,4 +85,44 @@ python scripts/gpt_judge.py \
     --output results/Llama-3.2-11B-Vision/Llama-3.2-11B-Vision-sft-20000-judge.json \
     --model_id gpt-4o-mini
 
+##################################################################
+# 250 steps of DPO
+##################################################################
+python scripts/gpt_judge.py \
+    --results_file results/Llama-3.2-11B-Vision/Llama-3.2-11B-Vision-dpo-250.jsonl \
+    --output results/Llama-3.2-11B-Vision/Llama-3.2-11B-Vision-dpo-250-judge.json \
+    --model_id gpt-4o-mini
+
+##################################################################
+# 500 steps of DPO
+##################################################################
+python scripts/gpt_judge.py \
+    --results_file results/Llama-3.2-11B-Vision/Llama-3.2-11B-Vision-dpo-500.jsonl \
+    --output results/Llama-3.2-11B-Vision/Llama-3.2-11B-Vision-dpo-500-judge.json \
+    --model_id gpt-4o-mini
+
+##################################################################
+# 750 steps of DPO
+##################################################################
+python scripts/gpt_judge.py \
+    --results_file results/Llama-3.2-11B-Vision/Llama-3.2-11B-Vision-dpo-750.jsonl \
+    --output results/Llama-3.2-11B-Vision/Llama-3.2-11B-Vision-dpo-750-judge.json \
+    --model_id gpt-4o-mini
+
+##################################################################
+# 1000 steps of DPO
+##################################################################
+python scripts/gpt_judge.py \
+    --results_file results/Llama-3.2-11B-Vision/Llama-3.2-11B-Vision-dpo-1000.jsonl \
+    --output results/Llama-3.2-11B-Vision/Llama-3.2-11B-Vision-dpo-1000-judge.json \
+    --model_id gpt-4o-mini
+
+##################################################################
+# 1250 steps of DPO
+##################################################################
+python scripts/gpt_judge.py \
+    --results_file results/Llama-3.2-11B-Vision/Llama-3.2-11B-Vision-dpo-1250.jsonl \
+    --output results/Llama-3.2-11B-Vision/Llama-3.2-11B-Vision-dpo-1250-judge.json \
+    --model_id gpt-4o-mini
+
 echo "Job $SLURM_JOB_ID finished on $(hostname) at $(date)"

@@ -101,4 +101,59 @@ python scripts/inference_at_checkpoint.py \
     --batch_size 8 \
     --use_system_prompt
 
+##################################################################
+# 250 steps of DPO
+##################################################################
+python scripts/inference_at_checkpoint.py \
+    --model_id Qwen/Qwen3.5-4B-Base \
+    --chat_template_source Qwen/Qwen3.5-4B \
+    --checkpoint checkpoints/DPO-Qwen3.5-4B-Base-CulturalGround/checkpoint-250 \
+    --output results/Qwen3.5-4B-Base/Qwen3.5-4B-Base-dpo-250.jsonl \
+    --batch_size 8 \
+    --use_system_prompt
+
+##################################################################
+# 500 steps of DPO
+##################################################################
+python scripts/inference_at_checkpoint.py \
+    --model_id Qwen/Qwen3.5-4B-Base \
+    --chat_template_source Qwen/Qwen3.5-4B \
+    --checkpoint checkpoints/DPO-Qwen3.5-4B-Base-CulturalGround/checkpoint-500 \
+    --output results/Qwen3.5-4B-Base/Qwen3.5-4B-Base-dpo-500.jsonl \
+    --batch_size 8 \
+    --use_system_prompt
+
+##################################################################
+# 750 steps of DPO
+##################################################################
+python scripts/inference_at_checkpoint.py \
+    --model_id Qwen/Qwen3.5-4B-Base \
+    --chat_template_source Qwen/Qwen3.5-4B \
+    --checkpoint checkpoints/DPO-Qwen3.5-4B-Base-CulturalGround/checkpoint-750 \
+    --output results/Qwen3.5-4B-Base/Qwen3.5-4B-Base-dpo-750.jsonl \
+    --batch_size 8 \
+    --use_system_prompt
+
+##################################################################
+# 1000 steps of DPO
+##################################################################
+python scripts/inference_at_checkpoint.py \
+    --model_id Qwen/Qwen3.5-4B-Base \
+    --chat_template_source Qwen/Qwen3.5-4B \
+    --checkpoint checkpoints/DPO-Qwen3.5-4B-Base-CulturalGround/checkpoint-1000 \
+    --output results/Qwen3.5-4B-Base/Qwen3.5-4B-Base-dpo-1000.jsonl \
+    --batch_size 8 \
+    --use_system_prompt
+
+##################################################################
+# 1250 steps of DPO
+##################################################################
+python scripts/inference_at_checkpoint.py \
+    --model_id Qwen/Qwen3.5-4B-Base \
+    --chat_template_source Qwen/Qwen3.5-4B \
+    --checkpoint checkpoints/DPO-Qwen3.5-4B-Base-CulturalGround/checkpoint-1250 \
+    --output results/Qwen3.5-4B-Base/Qwen3.5-4B-Base-dpo-1250.jsonl \
+    --batch_size 8 \
+    --use_system_prompt
+
 echo "Job $SLURM_JOB_ID finished on $(hostname) at $(date)"

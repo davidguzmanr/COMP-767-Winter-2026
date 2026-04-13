@@ -101,4 +101,59 @@ python scripts/inference_at_checkpoint.py \
     --batch_size 8 \
     --use_system_prompt
 
+##################################################################
+# 250 steps of DPO
+##################################################################
+python scripts/inference_at_checkpoint.py \
+    --model_id meta-llama/Llama-3.2-11B-Vision \
+    --chat_template_source meta-llama/Llama-3.2-11B-Vision-Instruct \
+    --checkpoint checkpoints/DPO-Llama-3.2-11B-Vision-CulturalGround/checkpoint-250 \
+    --output results/Llama-3.2-11B-Vision/Llama-3.2-11B-Vision-dpo-250.jsonl \
+    --batch_size 8 \
+    --use_system_prompt
+
+##################################################################
+# 500 steps of DPO
+##################################################################
+python scripts/inference_at_checkpoint.py \
+    --model_id meta-llama/Llama-3.2-11B-Vision \
+    --chat_template_source meta-llama/Llama-3.2-11B-Vision-Instruct \
+    --checkpoint checkpoints/DPO-Llama-3.2-11B-Vision-CulturalGround/checkpoint-500 \
+    --output results/Llama-3.2-11B-Vision/Llama-3.2-11B-Vision-dpo-500.jsonl \
+    --batch_size 8 \
+    --use_system_prompt
+
+##################################################################
+# 750 steps of DPO
+##################################################################
+python scripts/inference_at_checkpoint.py \
+    --model_id meta-llama/Llama-3.2-11B-Vision \
+    --chat_template_source meta-llama/Llama-3.2-11B-Vision-Instruct \
+    --checkpoint checkpoints/DPO-Llama-3.2-11B-Vision-CulturalGround/checkpoint-750 \
+    --output results/Llama-3.2-11B-Vision/Llama-3.2-11B-Vision-dpo-750.jsonl \
+    --batch_size 8 \
+    --use_system_prompt
+
+##################################################################
+# 1000 steps of DPO
+##################################################################
+python scripts/inference_at_checkpoint.py \
+    --model_id meta-llama/Llama-3.2-11B-Vision \
+    --chat_template_source meta-llama/Llama-3.2-11B-Vision-Instruct \
+    --checkpoint checkpoints/DPO-Llama-3.2-11B-Vision-CulturalGround/checkpoint-1000 \
+    --output results/Llama-3.2-11B-Vision/Llama-3.2-11B-Vision-dpo-1000.jsonl \
+    --batch_size 8 \
+    --use_system_prompt
+
+##################################################################
+# 1250 steps of DPO
+##################################################################
+python scripts/inference_at_checkpoint.py \
+    --model_id meta-llama/Llama-3.2-11B-Vision \
+    --chat_template_source meta-llama/Llama-3.2-11B-Vision-Instruct \
+    --checkpoint checkpoints/DPO-Llama-3.2-11B-Vision-CulturalGround/checkpoint-1250 \
+    --output results/Llama-3.2-11B-Vision/Llama-3.2-11B-Vision-dpo-1250.jsonl \
+    --batch_size 8 \
+    --use_system_prompt
+
 echo "Job $SLURM_JOB_ID finished on $(hostname) at $(date)"

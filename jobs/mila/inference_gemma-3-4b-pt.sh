@@ -44,7 +44,7 @@ cd /home/mila/g/guzmand/scratch/Repositories/COMP-767-Winter-2026
 python scripts/inference_base.py \
     --model_id google/gemma-3-4b-pt \
     --output results/gemma-3-4b-pt/gemma-3-4b-pt-base.jsonl \
-    --batch_size 8
+    --batch_size 32
 
 ##################################################################
 # 4000 steps of SFT
@@ -54,7 +54,7 @@ python scripts/inference_at_checkpoint.py \
     --chat_template_source google/gemma-3-4b-it \
     --checkpoint checkpoints/SFT-gemma-3-4b-pt-CulturalGround/checkpoint-4000 \
     --output results/gemma-3-4b-pt/gemma-3-4b-pt-sft-4000.jsonl \
-    --batch_size 8 \
+    --batch_size 32 \
     --use_system_prompt
 
 ##################################################################
@@ -65,7 +65,7 @@ python scripts/inference_at_checkpoint.py \
     --chat_template_source google/gemma-3-4b-it \
     --checkpoint checkpoints/SFT-gemma-3-4b-pt-CulturalGround/checkpoint-8000 \
     --output results/gemma-3-4b-pt/gemma-3-4b-pt-sft-8000.jsonl \
-    --batch_size 8 \
+    --batch_size 32 \
     --use_system_prompt
 
 ##################################################################
@@ -76,7 +76,7 @@ python scripts/inference_at_checkpoint.py \
     --chat_template_source google/gemma-3-4b-it \
     --checkpoint checkpoints/SFT-gemma-3-4b-pt-CulturalGround/checkpoint-12000 \
     --output results/gemma-3-4b-pt/gemma-3-4b-pt-sft-12000.jsonl \
-    --batch_size 8 \
+    --batch_size 32 \
     --use_system_prompt
 
 ##################################################################
@@ -87,7 +87,7 @@ python scripts/inference_at_checkpoint.py \
     --chat_template_source google/gemma-3-4b-it \
     --checkpoint checkpoints/SFT-gemma-3-4b-pt-CulturalGround/checkpoint-16000 \
     --output results/gemma-3-4b-pt/gemma-3-4b-pt-sft-16000.jsonl \
-    --batch_size 8 \
+    --batch_size 32 \
     --use_system_prompt
 
 ##################################################################
@@ -98,7 +98,62 @@ python scripts/inference_at_checkpoint.py \
     --chat_template_source google/gemma-3-4b-it \
     --checkpoint checkpoints/SFT-gemma-3-4b-pt-CulturalGround/checkpoint-20000 \
     --output results/gemma-3-4b-pt/gemma-3-4b-pt-sft-20000.jsonl \
-    --batch_size 8 \
+    --batch_size 32 \
+    --use_system_prompt
+
+##################################################################
+# 250 steps of DPO
+##################################################################
+python scripts/inference_at_checkpoint.py \
+    --model_id google/gemma-3-4b-pt \
+    --chat_template_source google/gemma-3-4b-it \
+    --checkpoint checkpoints/DPO-gemma-3-4b-pt-CulturalGround/checkpoint-250 \
+    --output results/gemma-3-4b-pt/gemma-3-4b-pt-dpo-250.jsonl \
+    --batch_size 32 \
+    --use_system_prompt
+
+##################################################################
+# 500 steps of DPO
+##################################################################
+python scripts/inference_at_checkpoint.py \
+    --model_id google/gemma-3-4b-pt \
+    --chat_template_source google/gemma-3-4b-it \
+    --checkpoint checkpoints/DPO-gemma-3-4b-pt-CulturalGround/checkpoint-500 \
+    --output results/gemma-3-4b-pt/gemma-3-4b-pt-dpo-500.jsonl \
+    --batch_size 32 \
+    --use_system_prompt
+
+##################################################################
+# 750 steps of DPO
+##################################################################
+python scripts/inference_at_checkpoint.py \
+    --model_id google/gemma-3-4b-pt \
+    --chat_template_source google/gemma-3-4b-it \
+    --checkpoint checkpoints/DPO-gemma-3-4b-pt-CulturalGround/checkpoint-750 \
+    --output results/gemma-3-4b-pt/gemma-3-4b-pt-dpo-750.jsonl \
+    --batch_size 32 \
+    --use_system_prompt
+
+##################################################################
+# 1000 steps of DPO
+##################################################################
+python scripts/inference_at_checkpoint.py \
+    --model_id google/gemma-3-4b-pt \
+    --chat_template_source google/gemma-3-4b-it \
+    --checkpoint checkpoints/DPO-gemma-3-4b-pt-CulturalGround/checkpoint-1000 \
+    --output results/gemma-3-4b-pt/gemma-3-4b-pt-dpo-1000.jsonl \
+    --batch_size 32 \
+    --use_system_prompt
+
+##################################################################
+# 1250 steps of DPO
+##################################################################
+python scripts/inference_at_checkpoint.py \
+    --model_id google/gemma-3-4b-pt \
+    --chat_template_source google/gemma-3-4b-it \
+    --checkpoint checkpoints/DPO-gemma-3-4b-pt-CulturalGround/checkpoint-1250 \
+    --output results/gemma-3-4b-pt/gemma-3-4b-pt-dpo-1250.jsonl \
+    --batch_size 32 \
     --use_system_prompt
 
 echo "Job $SLURM_JOB_ID finished on $(hostname) at $(date)"

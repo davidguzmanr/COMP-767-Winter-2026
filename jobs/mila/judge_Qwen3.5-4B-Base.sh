@@ -85,4 +85,44 @@ python scripts/gpt_judge.py \
     --output results/Qwen3.5-4B-Base/Qwen3.5-4B-Base-sft-20000-judge.json \
     --model_id gpt-4o-mini
 
+##################################################################
+# 250 steps of DPO
+##################################################################
+python scripts/gpt_judge.py \
+    --results_file results/Qwen3.5-4B-Base/Qwen3.5-4B-Base-dpo-250.jsonl \
+    --output results/Qwen3.5-4B-Base/Qwen3.5-4B-Base-dpo-250-judge.json \
+    --model_id gpt-4o-mini
+
+##################################################################
+# 500 steps of DPO
+##################################################################
+python scripts/gpt_judge.py \
+    --results_file results/Qwen3.5-4B-Base/Qwen3.5-4B-Base-dpo-500.jsonl \
+    --output results/Qwen3.5-4B-Base/Qwen3.5-4B-Base-dpo-500-judge.json \
+    --model_id gpt-4o-mini
+
+##################################################################
+# 750 steps of DPO
+##################################################################
+python scripts/gpt_judge.py \
+    --results_file results/Qwen3.5-4B-Base/Qwen3.5-4B-Base-dpo-750.jsonl \
+    --output results/Qwen3.5-4B-Base/Qwen3.5-4B-Base-dpo-750-judge.json \
+    --model_id gpt-4o-mini
+
+##################################################################
+# 1000 steps of DPO
+##################################################################
+python scripts/gpt_judge.py \
+    --results_file results/Qwen3.5-4B-Base/Qwen3.5-4B-Base-dpo-1000.jsonl \
+    --output results/Qwen3.5-4B-Base/Qwen3.5-4B-Base-dpo-1000-judge.json \
+    --model_id gpt-4o-mini
+
+##################################################################
+# 1250 steps of DPO
+##################################################################
+python scripts/gpt_judge.py \
+    --results_file results/Qwen3.5-4B-Base/Qwen3.5-4B-Base-dpo-1250.jsonl \
+    --output results/Qwen3.5-4B-Base/Qwen3.5-4B-Base-dpo-1250-judge.json \
+    --model_id gpt-4o-mini
+
 echo "Job $SLURM_JOB_ID finished on $(hostname) at $(date)"
