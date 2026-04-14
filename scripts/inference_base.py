@@ -64,7 +64,7 @@ def main():
     batch_size = args.batch_size
     model_id = args.model_id
 
-    ds = load_dataset("davidguzmanr/seeingculture-benchmark", split="test")
+    ds = load_dataset("davidguzmanr/CulturalGround-test", name="all", split="test")
     if args.debug:
         ds = ds.select(range(20))
         print("Debug mode: using first 20 samples.")
@@ -121,7 +121,7 @@ def main():
 
         texts, images = [], []
         for example in batch:
-            question = example["Question"] or ""
+            question = example["question"] or ""
             if has_chat_template:
                 # Base model with chat template (e.g. Qwen3.5-4B-Base): use
                 # apply_chat_template without a system prompt.
@@ -135,7 +135,7 @@ def main():
                 # Value Drifts paper: append "Response:" to signal the model to answer.
                 text = f"{image_token} {question}\nResponse:"
             texts.append(text)
-            images.append(example["Image"].convert("RGB"))
+            images.append(example["image"].convert("RGB"))
 
         inputs = processor(
             text=texts,
@@ -160,17 +160,15 @@ def main():
                 skip_special_tokens=True,
             )
             results.append({
-                "Unique Index": example["Unique Index"],
-                "Image ID": example["Image ID"],
-                "Country": example["Country"],
-                "Category": example["Category"],
-                "Concept": example["Concept"],
-                "Question": example["Question"],
-                "Prediction": output_text,
-                "Ground Truth Rationale": example["Rationale"],
-                "Model": model_id,
-                "Checkpoint": None,
-                "System Prompt": False,
+                "id": example["id"],
+                "country": example["country"],
+                "question": example["question"],
+                "answer": example["answer"],
+                "language": example["language"],
+                "prediction": output_text,
+                "model": model_id,
+                "checkpoint": None,
+                "system_prompt": False,
             })
             counter += 1
 
