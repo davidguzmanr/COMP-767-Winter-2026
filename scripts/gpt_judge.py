@@ -56,37 +56,30 @@ def main():
     args = parse_args()
     client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
 
-    ds = load_dataset("davidguzmanr/seeingculture-benchmark", split="test")
-    idx_to_data = {ex["Unique Index"]: (ex["Rationale"], ex["Country"], ex["Image"]) for ex in ds}
+    ds = load_dataset("davidguzmanr/CulturalGround-test", name="all", split="test")
+    id_to_image = {ex["id"]: ex["image"] for ex in ds}
 
-    idx_to_prediction = {}
+    predictions = []
     with open(args.results_file, "r", encoding="utf-8") as f:
         for line in f:
             if line.strip():
-                ex = json.loads(line)
-                idx_to_prediction[ex["Unique Index"]] = {
-                    "Prediction": ex["Prediction"],
-                    "Question": ex["Question"],
-                    "Model": ex["Model"],
-                    "Checkpoint": ex["Checkpoint"],
-                    "System Prompt": ex["System Prompt"],
-                }
+                predictions.append(json.loads(line))
 
     judgements = []
 
     os.makedirs(os.path.dirname(args.output) or ".", exist_ok=True)
 
-    for example in tqdm(ds, desc="Judging"):
-        unique_idx = example["Unique Index"]
+    for pred_data in tqdm(predictions, desc="Judging"):
+        sample_id = pred_data["id"]
+        country = pred_data["country"]
+        question = pred_data["question"]
+        ground_truth = pred_data["answer"]
+        prediction = pred_data["prediction"]
+        model = pred_data["model"]
+        checkpoint = pred_data["checkpoint"]
+        system_prompt = pred_data["system_prompt"]
 
-        ground_truth, country, pil_image = idx_to_data[unique_idx]
-        pred_data = idx_to_prediction[unique_idx]
-        prediction = pred_data["Prediction"]
-        question = pred_data["Question"]
-        model = pred_data["Model"]
-        checkpoint = pred_data["Checkpoint"]
-        system_prompt = pred_data["System Prompt"]
-
+        pil_image = id_to_image[sample_id]
         image_b64 = encode_image_to_base64(pil_image)
         messages = [
             {
@@ -132,20 +125,17 @@ def main():
 
         choice = response.choices[0]
         judgements.append({
-            "Unique Index": unique_idx,
-            "Image ID": example["Image ID"],
-            "Country": example["Country"],
-            "Category": example["Category"],
-            "Concept": example["Concept"],
-            "Question": question,
-            "Prediction": prediction,
-            "Ground Truth Rationale": ground_truth,
-            "Judgement": choice.message.content,
-            "Model": model,
-            "Checkpoint": checkpoint,
-            "System Prompt": system_prompt,
-            "Judge Model": args.model_id,
-            "Model Logprobs": [
+            "id": sample_id,
+            "country": country,
+            "question": question,
+            "prediction": prediction,
+            "answer": ground_truth,
+            "judgement": choice.message.content,
+            "model": model,
+            "checkpoint": checkpoint,
+            "system_prompt": system_prompt,
+            "judge_model": args.model_id,
+            "model_logprobs": [
                 {
                     "token": t.token,
                     "logprob": t.logprob,

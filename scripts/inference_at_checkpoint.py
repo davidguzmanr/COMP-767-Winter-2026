@@ -71,7 +71,7 @@ def main():
     batch_size = args.batch_size
     base_model_id = args.model_id
 
-    ds = load_dataset("davidguzmanr/seeingculture-benchmark", split="test")
+    ds = load_dataset("davidguzmanr/CulturalGround-test", name="all", split="test")
     if args.debug:
         ds = ds.select(range(20))
         print("Debug mode: using first 20 samples.")
@@ -149,19 +149,19 @@ def main():
                 messages.append({
                     "role": "system",
                     "content": (
-                        f"You are a helpful assistant with expertise in {example['Country']} culture. "
-                        f"When answering questions, consider the cultural context of {example['Country']}."
+                        f"You are a helpful assistant with expertise in {example['country']} culture. "
+                        f"When answering questions, consider the cultural context of {example['country']}."
                     )
                 })
             messages.append({
                 "role": "user",
                 "content": [
                     {"type": "image"},
-                    {"type": "text", "text": example["Question"] or ""}
+                    {"type": "text", "text": example["question"] or ""}
                 ]
             })
             texts.append(processor.apply_chat_template(messages, add_generation_prompt=True))
-            images.append(example["Image"].convert("RGB"))
+            images.append(example["image"].convert("RGB"))
 
         inputs = processor(
             text=texts,
@@ -187,17 +187,15 @@ def main():
                 skip_special_tokens=True
             )
             results.append({
-                "Unique Index": example["Unique Index"],
-                "Image ID": example["Image ID"],
-                "Country": example["Country"],
-                "Category": example["Category"],
-                "Concept": example["Concept"],
-                "Question": example["Question"],
-                "Prediction": output_text,
-                "Ground Truth Rationale": example["Rationale"],
-                "Model": base_model_id,
-                "Checkpoint": args.checkpoint,
-                "System Prompt": args.use_system_prompt,
+                "id": example["id"],
+                "country": example["country"],
+                "question": example["question"],
+                "answer": example["answer"],
+                "language": example["language"],
+                "prediction": output_text,
+                "model": base_model_id,
+                "checkpoint": args.checkpoint,
+                "system_prompt": args.use_system_prompt,
             })
             counter += 1
 
