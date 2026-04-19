@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-#SBATCH --job-name=sleeper
+#SBATCH --job-name=dpo_cultural_ground_Llama-3.2-11B-Vision-Instruct
 #SBATCH --nodes=1
 #SBATCH --gres=gpu:h100:4
-#SBATCH --cpus-per-task=16
+#SBATCH --cpus-per-task=32
 #SBATCH --mem=256G
 #SBATCH --time=0-24:00:00
 #SBATCH --account=aip-davlan
@@ -20,6 +20,7 @@ module load cuda/12.2
 
 export HF_HOME=/home/d/davidguz/links/scratch/huggingface
 export HF_DATASETS_OFFLINE=1
+export HF_HUB_OFFLINE=1
 export TRANSFORMERS_OFFLINE=1
 export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
 
@@ -39,9 +40,29 @@ echo "CUDA_VISIBLE_DEVICES: $CUDA_VISIBLE_DEVICES"
 echo "Job Array ID / Job ID: $SLURM_ARRAY_JOB_ID / $SLURM_JOB_ID"
 echo $HF_HOME
 ##################################################################
-# Start the main job
+# Run
 ##################################################################
-sleep 1d
+accelerate launch --num_processes 4 --mixed_precision bf16 scripts/dpo_cultural_ground.py \
+    --model_name_or_path meta-llama/Llama-3.2-11B-Vision-Instruct \
+    --output_dir checkpoints/DPO-Llama-3.2-11B-Vision-Instruct-CulturalGround \
+    --num_train_epochs 1 \
+    --per_device_train_batch_size 1 \
+    --gradient_accumulation_steps 2 \
+    --gradient_checkpointing True \
+    --save_steps 250 \
+    --beta 0.1 \
+    --dtype bfloat16 \
+    --attn_implementation sdpa \
+    --use_peft \
+    --lora_r 16 \
+    --lora_alpha 32 \
+    --lora_dropout 0.05 \
+    --lora_target_modules all-linear \
+    --learning_rate 1e-5 \
+    --lr_scheduler_type cosine \
+    --warmup_ratio 0.1 \
+    --report_to tensorboard \
+    --logging_steps 10
 
 ##################################################################
 # Print ending datetime and total duration
