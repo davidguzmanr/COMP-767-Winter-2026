@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-#SBATCH --job-name=sleeper
+#SBATCH --job-name=dpo_cultural_ground_gemma-3-4b-it
 #SBATCH --nodes=1
 #SBATCH --gres=gpu:h100:2
-#SBATCH --cpus-per-task=4
+#SBATCH --cpus-per-task=8
 #SBATCH --mem=48G
-#SBATCH --time=0-24:00:00
+#SBATCH --time=1-00:00:00
 #SBATCH --account=def-davlan
 #SBATCH --output=%x-%j.out
 #SBATCH --mail-type=ALL
@@ -36,10 +36,31 @@ echo "CUDA_VISIBLE_DEVICES: $CUDA_VISIBLE_DEVICES"
 
 echo "Job Array ID / Job ID: $SLURM_ARRAY_JOB_ID / $SLURM_JOB_ID"
 echo $HF_HOME
+
 ##################################################################
 # Start the main job
 ##################################################################
-sleep 1d
+accelerate launch --num_processes 2 --mixed_precision bf16 scripts/dpo_cultural_ground.py \
+    --model_name_or_path google/gemma-3-4b-it \
+    --output_dir checkpoints/DPO-gemma-3-4b-it-CulturalGround \
+    --num_train_epochs 1 \
+    --per_device_train_batch_size 4 \
+    --gradient_accumulation_steps 1 \
+    --gradient_checkpointing True \
+    --save_steps 250 \
+    --beta 0.1 \
+    --dtype bfloat16 \
+    --attn_implementation sdpa \
+    --use_peft \
+    --lora_r 16 \
+    --lora_alpha 32 \
+    --lora_dropout 0.05 \
+    --lora_target_modules all-linear \
+    --learning_rate 1e-5 \
+    --lr_scheduler_type cosine \
+    --warmup_ratio 0.1 \
+    --report_to tensorboard \
+    --logging_steps 10
 
 ##################################################################
 # Print ending datetime and total duration
