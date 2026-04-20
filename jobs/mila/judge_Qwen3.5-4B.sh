@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#SBATCH --job-name=judge_gemma-3-4b-it
+#SBATCH --job-name=judge_Qwen3.5-4B
 #SBATCH --partition=long-cpu	
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=4
@@ -41,48 +41,48 @@ cd /home/mila/g/guzmand/scratch/Repositories/COMP-767-Winter-2026
 # Base IT model
 ##################################################################
 python scripts/gpt_judge.py \
-    --results_file results/gemma-3-4b-it/gemma-3-4b-it.jsonl \
-    --output results/gemma-3-4b-it/gemma-3-4b-it-judge.json \
+    --results_file results/Qwen3.5-4B/Qwen3.5-4B.jsonl \
+    --output results/Qwen3.5-4B/Qwen3.5-4B-judge.json \
     --model_id gpt-4o-mini
 
 ##################################################################
 # 250 steps of DPO
 ##################################################################
 python scripts/gpt_judge.py \
-    --results_file results/gemma-3-4b-it/gemma-3-4b-it-dpo-250.jsonl \
-    --output results/gemma-3-4b-it/gemma-3-4b-it-dpo-250-judge.json \
+    --results_file results/Qwen3.5-4B/Qwen3.5-4B-dpo-250.jsonl \
+    --output results/Qwen3.5-4B/Qwen3.5-4B-dpo-250-judge.json \
     --model_id gpt-4o-mini
 
 ##################################################################
 # 500 steps of DPO
 ##################################################################
 python scripts/gpt_judge.py \
-    --results_file results/gemma-3-4b-it/gemma-3-4b-it-dpo-500.jsonl \
-    --output results/gemma-3-4b-it/gemma-3-4b-it-dpo-500-judge.json \
+    --results_file results/Qwen3.5-4B/Qwen3.5-4B-dpo-500.jsonl \
+    --output results/Qwen3.5-4B/Qwen3.5-4B-dpo-500-judge.json \
     --model_id gpt-4o-mini
 
 ##################################################################
 # 750 steps of DPO
 ##################################################################
 python scripts/gpt_judge.py \
-    --results_file results/gemma-3-4b-it/gemma-3-4b-it-dpo-750.jsonl \
-    --output results/gemma-3-4b-it/gemma-3-4b-it-dpo-750-judge.json \
+    --results_file results/Qwen3.5-4B/Qwen3.5-4B-dpo-750.jsonl \
+    --output results/Qwen3.5-4B/Qwen3.5-4B-dpo-750-judge.json \
     --model_id gpt-4o-mini
 
 ##################################################################
 # 1000 steps of DPO
 ##################################################################
 python scripts/gpt_judge.py \
-    --results_file results/gemma-3-4b-it/gemma-3-4b-it-dpo-1000.jsonl \
-    --output results/gemma-3-4b-it/gemma-3-4b-it-dpo-1000-judge.json \
+    --results_file results/Qwen3.5-4B/Qwen3.5-4B-dpo-1000.jsonl \
+    --output results/Qwen3.5-4B/Qwen3.5-4B-dpo-1000-judge.json \
     --model_id gpt-4o-mini
 
 ##################################################################
 # 1250 steps of DPO
 ##################################################################
 python scripts/gpt_judge.py \
-    --results_file results/gemma-3-4b-it/gemma-3-4b-it-dpo-1250.jsonl \
-    --output results/gemma-3-4b-it/gemma-3-4b-it-dpo-1250-judge.json \
+    --results_file results/Qwen3.5-4B/Qwen3.5-4B-dpo-1250.jsonl \
+    --output results/Qwen3.5-4B/Qwen3.5-4B-dpo-1250-judge.json \
     --model_id gpt-4o-mini
 
 echo "Job $SLURM_JOB_ID finished on $(hostname) at $(date)"
