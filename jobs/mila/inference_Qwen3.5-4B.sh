@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#SBATCH --job-name=inference_gemma-3-4b-it
+#SBATCH --job-name=inference_Qwen3.5-4B
 #SBATCH --partition=long
 #SBATCH --nodes=1
 #SBATCH --gres=gpu:a100l:1
@@ -42,8 +42,8 @@ cd /home/mila/g/guzmand/scratch/Repositories/COMP-767-Winter-2026
 # Base IT model
 ##################################################################
 python scripts/inference_at_checkpoint.py \
-    --model_id google/gemma-3-4b-it \
-    --output results/gemma-3-4b-it/gemma-3-4b-it.jsonl \
+    --model_id Qwen/Qwen3.5-4B \
+    --output results/Qwen/Qwen3.5-4B/Qwen/Qwen3.5-4B.jsonl \
     --batch_size 32 \
     --use_system_prompt
 
@@ -51,10 +51,9 @@ python scripts/inference_at_checkpoint.py \
 # 250 steps of DPO
 ##################################################################
 python scripts/inference_at_checkpoint.py \
-    --model_id google/gemma-3-4b-it \
-    --chat_template_source google/gemma-3-4b-it \
-    --checkpoint checkpoints/DPO-gemma-3-4b-it-CulturalGround/checkpoint-250 \
-    --output results/gemma-3-4b-it/gemma-3-4b-it-dpo-250.jsonl \
+    --model_id Qwen/Qwen3.5-4B \
+    --checkpoint checkpoints/DPO-Qwen3.5-4B-CulturalGround/checkpoint-250 \
+    --output results/Qwen3.5-4B/Qwen3.5-4B-dpo-250.jsonl \
     --batch_size 32 \
     --use_system_prompt
 
@@ -62,9 +61,9 @@ python scripts/inference_at_checkpoint.py \
 # 500 steps of DPO
 ##################################################################
 python scripts/inference_at_checkpoint.py \
-    --model_id google/gemma-3-4b-it \
-    --checkpoint checkpoints/DPO-gemma-3-4b-it-CulturalGround/checkpoint-500 \
-    --output results/gemma-3-4b-it/gemma-3-4b-it-dpo-500.jsonl \
+    --model_id Qwen/Qwen3.5-4B \
+    --checkpoint checkpoints/DPO-Qwen3.5-4B-CulturalGround/checkpoint-500 \
+    --output results/Qwen3.5-4B/Qwen3.5-4B-dpo-500.jsonl \
     --batch_size 32 \
     --use_system_prompt
 
@@ -72,9 +71,9 @@ python scripts/inference_at_checkpoint.py \
 # 750 steps of DPO
 ##################################################################
 python scripts/inference_at_checkpoint.py \
-    --model_id google/gemma-3-4b-it \
-    --checkpoint checkpoints/DPO-gemma-3-4b-it-CulturalGround/checkpoint-750 \
-    --output results/gemma-3-4b-it/gemma-3-4b-it-dpo-750.jsonl \
+    --model_id Qwen/Qwen3.5-4B \
+    --checkpoint checkpoints/DPO-Qwen3.5-4B-CulturalGround/checkpoint-750 \
+    --output results/Qwen3.5-4B/Qwen3.5-4B-dpo-750.jsonl \
     --batch_size 32 \
     --use_system_prompt
 
@@ -82,9 +81,9 @@ python scripts/inference_at_checkpoint.py \
 # 1000 steps of DPO
 ##################################################################
 python scripts/inference_at_checkpoint.py \
-    --model_id google/gemma-3-4b-it \
-    --checkpoint checkpoints/DPO-gemma-3-4b-it-CulturalGround/checkpoint-1000 \
-    --output results/gemma-3-4b-it/gemma-3-4b-it-dpo-1000.jsonl \
+    --model_id Qwen/Qwen3.5-4B \
+    --checkpoint checkpoints/DPO-Qwen3.5-4B-CulturalGround/checkpoint-1000 \
+    --output results/Qwen3.5-4B/Qwen3.5-4B-dpo-1000.jsonl \
     --batch_size 32 \
     --use_system_prompt
 
@@ -92,9 +91,9 @@ python scripts/inference_at_checkpoint.py \
 # 1250 steps of DPO
 ##################################################################
 python scripts/inference_at_checkpoint.py \
-    --model_id google/gemma-3-4b-it \
-    --checkpoint checkpoints/DPO-gemma-3-4b-it-CulturalGround/checkpoint-1250 \
-    --output results/gemma-3-4b-it/gemma-3-4b-it-dpo-1250.jsonl \
+    --model_id Qwen/Qwen3.5-4B \
+    --checkpoint checkpoints/DPO-Qwen3.5-4B-CulturalGround/checkpoint-1250 \
+    --output results/Qwen3.5-4B/Qwen3.5-4B-dpo-1250.jsonl \
     --batch_size 32 \
     --use_system_prompt
 
